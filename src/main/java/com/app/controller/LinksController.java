@@ -23,9 +23,7 @@ public class LinksController {
 	public String links(Model model){
 		List<Link> links = new ArrayList<Link>();
 		links = (List<Link>)roleRepository.findAll();
-		for(Link l:links){
-			System.out.println(l.getUrl());
-		}
+		
 		model.addAttribute("links",links);
 		return "links-management";
 	}

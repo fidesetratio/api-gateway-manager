@@ -68,7 +68,20 @@
 <tr>
 <th>No</th>
 <th>Link Name</th>
-<th>Group Member</th>
+<th>Tag</th>
+<th>Context</th>
+<th>Pointer</th>
+<th>URL</th>
+<th>Role</th>
+
+
+<th>Path</th>
+<th>All Permitable</th>
+<th>Is Active</th>
+
+<th>Full Url</th>
+<th>Action</th>
+
 </tr>
 </thead>
 <tbody>
@@ -76,7 +89,18 @@
       >
         <td th:text="${rowStat.index+1}"></td>
    		 <td th:text="${link.serviceId}"></td>
-        <td  th:text="${link.serviceId}"> </td>
+   		 <td th:text="${link.serviceId}"></td>
+  
+   		 <td th:text="${link.serviceId}"></td>
+   		 <td th:text="${link.serviceId}"></td>
+  
+        <td  th:text="${link.url}"> </td>
+        <td  th:text="${link.roles}"> </td>
+        <td  th:text="${link.context}"> </td>
+        <td  th:text="${link.permitAll}"> </td>
+        <td  th:text="${link.active}"> </td>
+        <td  th:text="${link.path}"> </td>
+        <td  th:text="${link.path}"> </td>
         
     	
     </tr>
