@@ -63,73 +63,31 @@
 
 
 
-
-                   <!-- Modal -->
-<div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" 
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close" 
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                   Add Role
-                </h4>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="modal-body">
-                
-                
-                
-                
-                
-                
-            </div>
-            
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-                <button type="button" class="btn btn-primary" onclick="submitajax('addrolesform')">
-                    Submit
-                </button>
-            </div>
-        </div>
-    </div>
-</div>              
-
-			<div id="table-panel">
-                </div>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>No</th>
+<th>Link Name</th>
+<th>Group Member</th>
+</tr>
+</thead>
+<tbody>
+   <tr th:each="link, rowStat: ${links}"
+      >
+        <td th:text="${rowStat.index+1}"></td>
+   		 <td th:text="${link.serviceId}"></td>
+        <td  th:text="${link.serviceId}"> </td>
+        
+    	
+    </tr>
+</tbody>
+</table>
 
 
- <div style="margin:3em;">
-<button type="button" class="btn btn-primary btn-lg " onclick="onClickButtonLoading(this);" id="load" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">Submit Order with Circle</button>
-<br>
-  <br>
-<button type="button" class="btn btn-primary btn-lg" id="load" onclick="onClickButtonLoading(this);" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order">Submit Order with Spinner</button>
-<br>
-  <br>
-<button type="button" class="btn btn-primary btn-lg" id="load" onclick="onClickButtonLoading(this);" data-loading-text="<i class='fa fa-refresh fa-spin '></i> Processing Order">Submit Order with Refresh</button>
-</div>
-                    </div>
-                    
-                    
-                    
-     
-                    
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="/js/links.js"></script>
+
+
+
+
     
 </div>
 </body>
