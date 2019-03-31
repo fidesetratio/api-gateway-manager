@@ -1,0 +1,20 @@
+    
+    <div>
+ <form id="addForm" class="form-horizontal" th:action="@{/authentication/provider-form-submit}"  th:object="${authenticationProvider}" method="POST" role="form">
+          <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="providerName">Provider Name</label>
+                    <div class="col-sm-10">
+        
+                    <div th:classappend="${#fields.hasErrors('providerName')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" th:field="*{providerName}" 
+                        id="providerName" placeholder="Provider Name"/>
+					   <span th:if="${#fields.hasErrors('providerName')}" class="help-block" th:errors="*{providerName}"></span>
+					</div>
+                    </div>
+					
+				  </div>
+		    
+   </form>            
+   </div>
+ 

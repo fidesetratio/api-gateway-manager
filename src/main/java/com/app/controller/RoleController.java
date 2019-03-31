@@ -41,7 +41,6 @@ public class RoleController {
 			Roles r = new Roles();
 			r.setRoleCategory(new RoleCategory());
 			r.getRoleCategory().setRoleCategoryId(new Long(0));
-			
 			List<RoleCategory> roleCategory = (List<RoleCategory>)roleCategoryRepo.findAll();
 			model.addAttribute("categories", roleCategory);
 			model.addAttribute("role", roles);

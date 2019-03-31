@@ -1,34 +1,9 @@
 
-function openAddLink(){
+function openAddProvider(){
 	var form = $("#addForm");
+	form.find("input[type=text], textarea").val("");
 	form.find(".help-block").remove();
 	form.find(".has-error").removeClass('.input-icon right has-error');
-	var roleCategory=$("#roleCategory");
-	var roleText=$("#roleText");
-	
-	var pickup = form.find("#rolePickup");
-
-	
-	roleCategory.show();
-	roleText.hide();
-
-	pickup.change(function(){
-		
-		if($(this).val()==1){
-			roleCategory.show();
-			roleText.hide();
-		}
-		if($(this).val()==2){
-			roleCategory.hide();
-			roleText.show();
-		}
-	});
-	
-	
-	
-	
-	
-	
 	var w = $("#addModal");
 	w.modal("toggle");
 }
@@ -37,40 +12,15 @@ function openAddLink(){
 
 function submitajax(id){$
 	$form = $("#"+id);
-
 $.ajax({
     url: $form.attr('action'),
     type: 'post',
     data: $form.serialize(),
     success: function(response) {
     	var r = $(response);
-    	
     	// if the response contains any errors, replace the form
       if (r.find('.has-error').length) {
-    	  
-    	  
-    	  var roleCategory=r.find("#roleCategory");
-    		var roleText=r.find("#roleText");
-    		
-    		var pickup = r.find("#rolePickup");
-
-    		
-    		
-    		
-    		roleCategory.show();
-    		roleText.hide();
-
-    		pickup.change(function(){
-    			if($(this).val()==1){
-    				roleCategory.show();
-    				roleText.hide();
-    			}
-    			if($(this).val()==2){
-    				roleCategory.hide();
-    				roleText.show();
-    			}
-    		});
-
+    	
     		$form.replaceWith(r);
       	  
     	  
@@ -79,28 +29,19 @@ $.ajax({
       		$form.find(".help-block").remove();
       		$form.find(".has-error").removeClass('.input-icon right has-error');
       		$("#addModal").modal("hide");
-      		
-      		$.get("/links/list-links",function(data){
+      		$.get("/category/list-categories",function(data){
       			$("#table-panel").html(data);
       		});
      	
+
       		      	
       	}
       }
 	});
-	return false;
+	
+return false;
+	
 }
-
-
-function onClickButtonLoading(t){
-	var $this = $(t);
-		$this.button('loading');
-	    setTimeout(function() {
-	       $this.button('reset');
-	   }, 4000);
-	   	
-}
-
 
 function deleteItem(item){
 	var i = $(item);
@@ -112,13 +53,13 @@ function deleteItem(item){
 function confirmDelete(item){
 	var i = $(item);
     var entityId = i.attr('data-entity-id');
-    $.get("/links/delete-link",{linkId:entityId},function(data){
+    $.get("/category/delete-category",{categoryId:entityId},function(data){
     	var w = $("#confirmDeleteModal");
     	w.on("hidden.bs.modal",function(e){
-    		 $.get("/links/list-links",function(data){
-    			 $("#table-panel").html(data);
-    		 });
-    		 
+    		$.get("/category/list-categories",function(data){
+      			$("#table-panel").html(data);
+      		});
+     	 
     	})
     	w.modal("hide");
     	

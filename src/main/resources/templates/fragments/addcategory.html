@@ -1,0 +1,33 @@
+    
+    <div>
+ <form id="addForm" class="form-horizontal" th:action="@{/category/category-form-submit}"  th:object="${roleCategory}" method="POST" role="form">
+              <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="categoryName">Category Name</label>
+                    <div class="col-sm-10">
+        
+                    <div th:classappend="${#fields.hasErrors('categoryName')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" th:field="*{categoryName}" 
+                        id="categoryName" placeholder="Category Name"/>
+					   <span th:if="${#fields.hasErrors('categoryName')}" class="help-block" th:errors="*{categoryName}"></span>
+					</div>
+                    </div>
+					
+				  </div>
+				  
+				         <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="descriptionName">Description</label>
+                    <div class="col-sm-10">
+        
+                    <div th:classappend="${#fields.hasErrors('categoryDescription')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" th:field="*{categoryDescription}" 
+                        id="categoryDescription" placeholder="Category Description"/>
+					   <span th:if="${#fields.hasErrors('categoryDescription')}" class="help-block" th:errors="*{categoryDescription}"></span>
+					</div>
+                    </div>
+					
+				  </div>
+</form>            
+   </div>
+ 

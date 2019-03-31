@@ -25,7 +25,7 @@ public class Roles {
     private RoleCategory roleCategory;
 	
     
-    @Size(min=1, max=32, message="First name must be between 1 and 32 characters")
+    @Size(min=1, max=32, message="Role Name must be between 1 and 32 characters")
 	@Column(name="role_name", nullable=true, length=255)
 	private String roleName;
 

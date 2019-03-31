@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.app.manager.converter.BooleanStringConverter;
 import com.app.manager.converter.ListDelimiterConverter;
@@ -25,17 +27,22 @@ public class Link {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private Long linkId;
 	
+	
+	
+	@Size(min=1, max=32, message="Context must be between 1 and 32 characters")
 	@Column(name="context", nullable=true, length=255)
 	private String context;
 	
+	@Size(min=1, max=32, message="Service Id must be between 1 and 32 characters")
 	@Column(name="service_id", nullable=true, length=255)
 	private String serviceId;
 	
-	
-	
+
+	@NotEmpty(message="Url must not empty")
 	@Column(name="url", nullable=true, length=255)
 	private String url;
 	
+	@NotEmpty(message="Path must not empty")
 	@Column(name="path", nullable=true, length=255)
 	private String path;
 	
@@ -48,16 +55,6 @@ public class Link {
 	@Column(name="permitall")
 	@Convert(converter=BooleanStringConverter.class)
 	private boolean permitAll;
-
-	
-	@Column(name="isNew")
-	@Convert(converter=BooleanStringConverter.class)
-	private boolean isNew;
-
-	@Column(name="isNewUrl")
-	@Convert(converter=BooleanStringConverter.class)
-	private boolean isNewUrl;
-	
 	
 	@Column(name="roles")
 	@Convert(converter=ListDelimiterConverter.class)
@@ -70,13 +67,12 @@ public class Link {
 	
 	public Link(){
 		this.roles = new ArrayList<String>();
-		this.categoryId = new Long(0);
-		this.isNew = true;
-		this.isNewUrl = true;
+		this.categoryId = new Long(1);
 		this.permitAll = false;
 		this.creationDateTime = new Date();
-		
-		
+		this.active = true;
+		this.serviceId="";
+		this.url = null;
 	}
 	
 	
@@ -163,17 +159,6 @@ public class Link {
 		this.path = path;
 	}
 
-
-	public boolean isNew() {
-		return isNew;
-	}
-
-
-	public void setNew(boolean isNew) {
-		this.isNew = isNew;
-	}
-
-
 	public List<String> getRoles() {
 		return roles;
 	}
@@ -181,16 +166,6 @@ public class Link {
 
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
-	}
-
-
-	public boolean isNewUrl() {
-		return isNewUrl;
-	}
-
-
-	public void setNewUrl(boolean isNewUrl) {
-		this.isNewUrl = isNewUrl;
 	}
 
 
@@ -202,10 +177,20 @@ public class Link {
 	public void setPermitAll(boolean permitAll) {
 		this.permitAll = permitAll;
 	}
+
+
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(this.serviceId+","+this.context+","+this.path+","+this.url+","+this.active+","+this.permitAll+","+this.categoryId+","+this.getRoles().size());
+		
+		return buffer.toString();
+	}
 	
 	
 	
 		
+	
 	
 
 }

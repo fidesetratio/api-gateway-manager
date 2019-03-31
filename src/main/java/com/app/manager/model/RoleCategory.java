@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="roles_categories")
@@ -23,6 +24,7 @@ public class RoleCategory {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private Long roleCategoryId;
 	
+	@Size(min=1, max=32, message="Role Name must be between 1 and 32 characters")
 	@Column(name="category_name", nullable=true, length=255)
 	private String categoryName;
 	

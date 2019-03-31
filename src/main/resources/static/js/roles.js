@@ -4,6 +4,7 @@
 function openRoleDialog(){
 	var form = $("#addrolesform");
 	form.find("input[type=text], textarea").val("");
+		
 	form.find(".help-block").remove();
 	form.find(".has-error").removeClass('.input-icon right has-error');
 	

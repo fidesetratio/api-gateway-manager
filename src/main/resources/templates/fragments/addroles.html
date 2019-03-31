@@ -5,9 +5,10 @@
                     <label  class="col-sm-2 control-label"
                               for="inputEmail3">Role Name</label>
                     <div class="col-sm-10">
+        
                     <div th:classappend="${#fields.hasErrors('roleName')} ? 'input-icon right has-error' : ''">
                         <input type="text" class="form-control" th:field="*{roleName}" 
-                        id="inputEmail3" placeholder="Role"/>
+                        id="inputEmail3" placeholder="Role Name"/>
 					   <span th:if="${#fields.hasErrors('roleName')}" class="help-block" th:errors="*{roleName}"></span>
 					
 						
