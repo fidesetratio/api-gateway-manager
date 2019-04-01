@@ -1,12 +1,15 @@
 package com.app.manager.model;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import com.app.manager.converter.BooleanStringConverter;
 
 @Entity
 @Table(name="authentication_provider")
@@ -29,6 +32,12 @@ public class AuthenticationProvider {
 	private String typeProvider;
 
 
+	
+	@Column(name="active")
+	@Convert(converter=BooleanStringConverter.class)
+	private boolean active;
+	
+	
 	public Long getProviderId() {
 		return providerId;
 	}
@@ -66,6 +75,16 @@ public class AuthenticationProvider {
 
 	public void setTypeProvider(String typeProvider) {
 		this.typeProvider = typeProvider;
+	}
+
+
+	public boolean isActive() {
+		return active;
+	}
+
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 

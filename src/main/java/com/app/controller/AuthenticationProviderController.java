@@ -30,7 +30,7 @@ public class AuthenticationProviderController {
 		}
 		
 		return "fragments/addprovider";
-				
+			
 	}
 	
 }
