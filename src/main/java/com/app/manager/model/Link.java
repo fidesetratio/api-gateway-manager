@@ -183,14 +183,6 @@ public class Link {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(this.serviceId+","+this.context+","+this.path+","+this.url+","+this.active+","+this.permitAll+","+this.categoryId+","+this.getRoles().size());
-		
 		return buffer.toString();
 	}
-	
-	
-	
-		
-	
-	
-
 }
