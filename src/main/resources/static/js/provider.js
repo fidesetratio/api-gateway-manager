@@ -29,7 +29,7 @@ $.ajax({
       		$form.find(".help-block").remove();
       		$form.find(".has-error").removeClass('.input-icon right has-error');
       		$("#addModal").modal("hide");
-      		$.get("/category/list-categories",function(data){
+      		$.get("/authentication/list-provider",function(data){
       			$("#table-panel").html(data);
       		});
      	
@@ -53,10 +53,10 @@ function deleteItem(item){
 function confirmDelete(item){
 	var i = $(item);
     var entityId = i.attr('data-entity-id');
-    $.get("/category/delete-category",{categoryId:entityId},function(data){
+    $.get("/authentication/delete-provider",{providerId:entityId},function(data){
     	var w = $("#confirmDeleteModal");
     	w.on("hidden.bs.modal",function(e){
-    		$.get("/category/list-categories",function(data){
+    		$.get("/authentication/list-provider",function(data){
       			$("#table-panel").html(data);
       		});
      	 

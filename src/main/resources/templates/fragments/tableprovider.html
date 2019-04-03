@@ -2,13 +2,37 @@
 <thead>
 <tr>
 <th>No</th>
-<th>Category Name</th>
+<th>Provider Name</th>
+<th>Type Provider</th>
+<th>Url</th>
+
 <th>Action</th>
 
 </tr>
 </thead>
 <tbody>
 
+       <tr th:each="authenticationProviderTemp, rowStat: ${authenticationProviderList}"
+      >
+        <td th:text="${rowStat.index+1}"></td>
+   		 <td th:text="${authenticationProviderTemp.providerName}"></td>
+   		 <td th:text="${authenticationProviderTemp.typeProvider}"></td>
+   		 <td th:text="${authenticationProviderTemp.url}"></td>
+   		 
+  
+        <td>
+        
+         <div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Action
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="#" onclick="deleteItem(this);" th:attr="data-entity-id=${authenticationProviderTemp.providerId}" data-toggle="modal"  data-target="#confirmDeleteModal" >Delete</a></li>
+    <li><a href="#">Edit</a></li>
+  </ul>
+</div> 
+    	 </td>
+        
+ </tr>
         
  
    </tbody>
