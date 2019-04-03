@@ -17,6 +17,7 @@ public class AuthenticationProvider {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+	@Column(name="providerId")
 	private Long providerId;
 	
 
@@ -30,13 +31,24 @@ public class AuthenticationProvider {
 	
 	@Column(name="type_provider", nullable=true, length=255)
 	private String typeProvider;
+	
+	
+	@Column(name="clientId", nullable=true, length=255)
+	private String clientId;
+	
 
+	@Column(name="clientSecret", nullable=true, length=255)
+	private String clientSecret;
+	
 
 	
 	@Column(name="active")
 	@Convert(converter=BooleanStringConverter.class)
 	private boolean active;
 	
+	public AuthenticationProvider() {
+		providerId = new Long(0);
+	}
 	
 	public Long getProviderId() {
 		return providerId;
@@ -85,6 +97,26 @@ public class AuthenticationProvider {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+
+	public String getClientId() {
+		return clientId;
+	}
+
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+
+	public String getClientSecret() {
+		return clientSecret;
+	}
+
+
+	public void setClientSecret(String clientSecret) {
+		this.clientSecret = clientSecret;
 	}
 	
 

@@ -13,6 +13,32 @@
 					</div>
                     </div>
                     </div>
+                    
+                       <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="clientSecret">Client Secret</label>
+                    <div class="col-sm-10">
+        
+                    <div th:classappend="${#fields.hasErrors('clientSecret')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" th:field="*{clientSecret}" 
+                        id="clientSecret" placeholder="Client Secret"/>
+					   <span th:if="${#fields.hasErrors('clientSecret')}" class="help-block" th:errors="*{clientSecret}"></span>
+					</div>
+                    </div>
+                    </div>
+                    
+                                   <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="clientId">Client ID</label>
+                    <div class="col-sm-10">
+        
+                    <div th:classappend="${#fields.hasErrors('clientId')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" th:field="*{clientId}" 
+                        id="clientId" placeholder="Client ID"/>
+					   <span th:if="${#fields.hasErrors('clientId')}" class="help-block" th:errors="*{clientId}"></span>
+					</div>
+                    </div>
+                    </div>
 		  <div class="form-group">
          
 		            <label  class="col-sm-2 control-label"

@@ -22,6 +22,7 @@ public class RoleCategory {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+	@Column(name="roleCategoryId")
 	private Long roleCategoryId;
 	
 	@Size(min=1, max=32, message="Role Name must be between 1 and 32 characters")

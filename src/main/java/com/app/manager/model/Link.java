@@ -25,6 +25,7 @@ public class Link {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
+	@Column(name="linkId")
 	private Long linkId;
 	
 	
@@ -62,8 +63,20 @@ public class Link {
 	
 	@Column(name="categoryId")
 	private Long categoryId;
+	
+
+	@Column(name="providerId")
+	private Long providerId;
+	
+
+	@Column(name="stripPrefix")
+	@Convert(converter=BooleanStringConverter.class)
+	private boolean stripPrefix;
     
-    
+	@Column(name="sensitiveHeaders")
+	@Convert(converter=ListDelimiterConverter.class)
+	private List<String> sensitiveHeaders = new ArrayList<String>();
+	
 	
 	public Link(){
 		this.roles = new ArrayList<String>();
@@ -73,6 +86,7 @@ public class Link {
 		this.active = true;
 		this.serviceId="";
 		this.url = null;
+		this.stripPrefix = true;
 	}
 	
 	
@@ -184,5 +198,35 @@ public class Link {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(this.serviceId+","+this.context+","+this.path+","+this.url+","+this.active+","+this.permitAll+","+this.categoryId+","+this.getRoles().size());
 		return buffer.toString();
+	}
+
+
+	public Long getProviderId() {
+		return providerId;
+	}
+
+
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
+	}
+
+
+	public boolean isStripPrefix() {
+		return stripPrefix;
+	}
+
+
+	public void setStripPrefix(boolean stripPrefix) {
+		this.stripPrefix = stripPrefix;
+	}
+
+
+	public List<String> getSensitiveHeaders() {
+		return sensitiveHeaders;
+	}
+
+
+	public void setSensitiveHeaders(List<String> sensitiveHeaders) {
+		this.sensitiveHeaders = sensitiveHeaders;
 	}
 }

@@ -94,6 +94,44 @@
 	    </div>
     
 <div class="clearfix"></div>
+
+<div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+         <label for="active">Authentication Provider</label>
+		     <select class="form-control" id="authenticationProvider" th:field="*{providerId}">
+			 						<option value="0" th:selected="${providerId==0}">Select Available Provider</option>
+		   			                <option th:each="lp : ${listProviders}"
+                        th:value="${lp.providerId}" th:text="${lp.providerName}" th:selected="${lp.providerId==providerId}">providerId
+           				</option> 
+			
+			</select>
+	    </div>
+    
+<div class="clearfix"></div>
+
+        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+         <label for="active">Strip Prefix</label>
+		     <select class="form-control" th:field="*{stripPrefix}">
+		   	  <option th:value="true" data-th-field="*{stripPrefix}" th:selected="${stripPrefix==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{stripPrefix}" th:selected="${stripPrefix==false}">false</option>
+			</select>
+	
+        
+        </div>
+
+<div class="clearfix"></div>
+
+
+ <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+        <label for="active">Sensitive Headers (ex: Cookie;Set-Cookie )</label>
+		    <input type="text" class="form-control" id="sensitiveHeaders" name="sensitiveHeaders" >
+         
+		   		
+		   	</select>
+	    
+		</div>
+
+
+    
     			  </div>
 	
                   

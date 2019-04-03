@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.Link;
 import com.app.manager.model.RoleCategory;
 import com.app.manager.model.Roles;
+import com.app.manager.repo.AuthenticationProviderRepository;
 import com.app.manager.repo.LinkRepository;
 import com.app.manager.repo.RolesCategoriesRepository;
 
@@ -29,6 +31,10 @@ public class LinksController {
 	@Autowired
 	private LinkRepository linkRepository;
 
+	
+	@Autowired
+	private AuthenticationProviderRepository authenticationProviderRepository;
+
 	@Autowired
 	private RolesCategoriesRepository roleCategories;
 
@@ -37,6 +43,7 @@ public class LinksController {
 	public String links(Model model){
 		List<Link> links = new ArrayList<Link>();
 		links = (List<Link>)linkRepository.findAll();
+		List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 		
 		
 		Link link = new Link();
@@ -44,6 +51,8 @@ public class LinksController {
 		List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
 		
 		model.addAttribute("listCategories",listCategories);		
+		model.addAttribute("listProviders",listAuthenticationProvider);		
+		
 		model.addAttribute("link",link);
 		model.addAttribute("links",links);
 		return "links-management";
@@ -51,7 +60,7 @@ public class LinksController {
 
 	
 	@RequestMapping(value="/link-form-submit",method=RequestMethod.POST)
-	public String linkSubmit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText){
+	public String linkSubmit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText,@RequestParam(name = "sensitiveHeaders") String sensitiveHeaders){
 		
 		
 		
@@ -60,6 +69,10 @@ public class LinksController {
 				List<String> roles = new ArrayList<String>(Arrays.asList(roleText.split(";")));
 				link.setRoles(roles);
 			};
+			if(!sensitiveHeaders.trim().equals("")) {
+				List<String> senheaders = new ArrayList<String>(Arrays.asList(sensitiveHeaders.split(";")));
+				link.setSensitiveHeaders(senheaders);
+			}
 		}
 		
 		if(link.getCategoryId()>0) {
@@ -74,6 +87,10 @@ public class LinksController {
 			
 		}
 		if (bindingResult.hasErrors()) {
+			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+			model.addAttribute("listCategories",listCategories);		
+			model.addAttribute("listProviders",listAuthenticationProvider);		
 			model.addAttribute("link",link);
 			return "fragments/addlinks";
 			
