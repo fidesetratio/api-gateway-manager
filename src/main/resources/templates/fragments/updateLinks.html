@@ -1,0 +1,140 @@
+
+    <div>
+     <form id="updateForm" class="form-horizontal" th:action="@{/links/update-form-submit}"  th:object="${linkupdate}" method="POST" role="form">
+                  
+                  <div class="row">
+<div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="serviceId">Service ID</label>
+ <div th:classappend="${#fields.hasErrors('serviceId')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" th:field="*{serviceId}" 
+                        id="serviceId" placeholder="Service Id"/>
+					   <span th:if="${#fields.hasErrors('serviceId')}" class="help-block" th:errors="*{serviceId}"></span>
+					</div>
+                    
+ 
+        </div>
+        <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Context</label>
+ <div th:classappend="${#fields.hasErrors('context')} ? 'input-icon right has-error' : ''">
+            <input type="text" class="form-control" id="context" th:field="*{context}" placeholder="Context">
+            		   <span th:if="${#fields.hasErrors('context')}" class="help-block" th:errors="*{context}"></span>
+			
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="url">Path</label>
+ <div th:classappend="${#fields.hasErrors('path')} ? 'input-icon right has-error' : ''">
+            <input type="text" class="form-control" id="path" th:field="*{path}" placeholder="Path">
+ 			   <span th:if="${#fields.hasErrors('path')}" class="help-block" th:errors="*{path}"></span>
+			
+ 	</div>
+        </div>
+        <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="url">Url</label>
+ <div th:classappend="${#fields.hasErrors('url')} ? 'input-icon right has-error' : ''">
+            <input type="text" class="form-control" id="url" th:field="*{url}" placeholder="Url">
+ 			   <span th:if="${#fields.hasErrors('url')}" class="help-block" th:errors="*{url}"></span>
+			
+ 	</div>
+    
+    	     
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-xs-10 col-sm-10 col-md-6 col-lg-6">
+    
+            <label for="active">Active</label>
+		     <select class="form-control" th:field="*{active}">
+		   	  <option th:value="true" data-th-field="*{active}" th:selected="${active==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{active}" th:selected="${active==false}">false</option>
+			</select>
+	
+    
+        </div>
+        <div class="col-xs-10 col-sm-10 col-md-6 col-lg-6">
+         <label for="active">Permit All</label>
+		     <select class="form-control" th:field="*{permitAll}">
+		   	  <option th:value="true" data-th-field="*{permitAll}" th:selected="${permitAll==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{permitAll}" th:selected="${permitAll==false}">false</option>
+			</select>
+	
+        
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+         <label for="active">Role Pickup?</label>
+		     <select class="form-control" id="rolePickup">
+		   	  <option th:value="1">From Role Group Category</option>
+		   	  <option th:value="2">Without Role Group Category</option>
+			</select>
+	    </div>
+    
+<div class="clearfix"></div>
+    
+	    <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12" id="roleCategory">
+         <label for="active">Role Category</label>
+		     <select class="form-control" th:field="*{categoryId}">
+		     
+		     						<option value="0" th:selected="${categoryId==0}">Select Available Group</option>
+		   			                <option th:each="lg : ${listCategories}"
+                        th:value="${lg.roleCategoryId}" th:text="${lg.categoryName}" th:selected="${lg.roleCategoryId==categoryId}">fGroup
+                </option>
+ 
+		   		
+		   	</select>
+	    </div>
+
+
+ <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12" id="roleText" style="display:none">
+         <label for="active">Role Text (ex: ROLE_ADMIN;ROLE_USER )</label>
+		    <input type="text" class="form-control" id="roleText" name="roleText" >
+         
+		   		
+		   	</select>
+	    </div>
+    
+<div class="clearfix"></div>
+
+<div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+         <label for="active">Authentication Provider</label>
+		     <select class="form-control" id="authenticationProvider" th:field="*{providerId}">
+			 						<option value="0" th:selected="${providerId==0}">Select Available Provider</option>
+		   			                <option th:each="lp : ${listProviders}"
+                        th:value="${lp.providerId}" th:text="${lp.providerName}" th:selected="${lp.providerId==providerId}">providerId
+           				</option> 
+			
+			</select>
+	    </div>
+    
+<div class="clearfix"></div>
+
+        <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+         <label for="active">Strip Prefix</label>
+		     <select class="form-control" th:field="*{stripPrefix}">
+		   	  <option th:value="true" data-th-field="*{stripPrefix}" th:selected="${stripPrefix==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{stripPrefix}" th:selected="${stripPrefix==false}">false</option>
+			</select>
+	
+        
+        </div>
+
+<div class="clearfix"></div>
+
+
+ <div class="col-xs-10 col-sm-10 col-md-12 col-lg-12">
+        <label for="active">Sensitive Headers (ex: Cookie;Set-Cookie )</label>
+		    <input type="text" class="form-control" id="sensitiveHeaders" name="sensitiveHeaders" th:value="${sensitiveHeaders}">
+     	    <input type="hidden" class="form-control" id="linkId" th:field="*{linkId}">
+ 		 	    
+	    
+		</div>
+
+
+    
+    			  </div>
+	
+                  
+                 
+             </form>
+             
+   </div>
