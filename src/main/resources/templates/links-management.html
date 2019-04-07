@@ -106,11 +106,64 @@
 </div>
 
 
+
+
+<div class="modal fade" id="updateModel" tabindex="-1" role="dialog" 
+     aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" 
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="updateModalLabel">
+                   Update Link
+                </h4>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <div id="form-panel-update"> 
+            
+                </div>
+                
+                
+                
+                
+                
+                
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitupdateajax('updateForm')">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
                
 <button class="btn btn-primary" id="addlinkId"  onclick="openAddLink()">
     Add Link
 </button>
 
+<button class="btn btn-primary" onclick="onClickButtonLoading('refreshButton')" id="refreshButton" data-loading-text="Loading ...">
+        Reload Service
+ </button>
+<br/>
+<div class="alert alert-danger" id="alert" style="display:none">
+  <strong>Danger!</strong> Please check connection to api manager
+</div>
 <div id="table-panel">
                 <div  layout:replace="~{fragments/tablelinks}"> 
                 </div>

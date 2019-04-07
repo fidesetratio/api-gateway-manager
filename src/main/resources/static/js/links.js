@@ -92,12 +92,79 @@ $.ajax({
 }
 
 
+
+function submitupdateajax(id){$
+	$form = $("#"+id);
+
+$.ajax({
+    url: $form.attr('action'),
+    type: 'post',
+    data: $form.serialize(),
+    success: function(response) {
+    	var r = $(response);
+    	
+    	// if the response contains any errors, replace the form
+      if (r.find('.has-error').length) {
+    	  
+    	  
+    	  var roleCategory=r.find("#roleCategory");
+    		var roleText=r.find("#roleText");
+    		
+    		var pickup = r.find("#rolePickup");
+
+    		
+    		
+    		
+    		roleCategory.show();
+    		roleText.hide();
+
+    		pickup.change(function(){
+    			if($(this).val()==1){
+    				roleCategory.show();
+    				roleText.hide();
+    			}
+    			if($(this).val()==2){
+    				roleCategory.hide();
+    				roleText.show();
+    			}
+    		});
+
+    		$form.replaceWith(r);
+      	  
+    	  
+      } else {
+      		$form.find("input[type=text], textarea").val("");
+      		$form.find(".help-block").remove();
+      		$form.find(".has-error").removeClass('.input-icon right has-error');
+      		$("#updateModel").modal("hide");
+      		
+      		
+      		      	
+      	}
+      }
+	});
+	return false;
+}
+
+
+
 function onClickButtonLoading(t){
-	var $this = $(t);
-		$this.button('loading');
+	
+	var $this = $("#"+t);
+
+	$this.button('loading');
 	    setTimeout(function() {
 	       $this.button('reset');
-	   }, 4000);
+     		$.get("/links/reload-apigateway",function(data){
+     			if(data=="ok"){
+     				$("#alert").hide();     				
+     			}else if(data=="error"){
+     				$("#alert").show();
+     			}
+     		});
+
+	    
+	    }, 4000);
 	   	
 }
 
@@ -128,3 +195,25 @@ function confirmDelete(item){
     
     return false;
 }
+
+
+
+// update
+
+
+function updateLinks(id){
+	
+	 $.get("/links/viewupdate",{linkId:id},function(data){
+		 		
+		 		if(data != "error"){
+		 			$("#form-panel-update").html(data);
+		 			var w = $("#updateModel");
+		 			w.modal("toggle");
+
+		 		}
+		 	
+		 
+	    	})
+	   
+}
+

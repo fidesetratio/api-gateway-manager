@@ -38,9 +38,12 @@
   <span class="caret"></span></button>
   <ul class="dropdown-menu">
     <li><a href="#" onclick="deleteItem(this);" th:attr="data-entity-id=${link.linkId}" data-toggle="modal"  data-target="#confirmDeleteModal" >Delete</a></li>
-    <li><a href="#">Edit</a></li>
+    <li><a href="#"  
+    th:onclick="'updateLinks(\'' + ${link.linkId} + '\');'"
+    >Edit</a></li>
   </ul>
 </div> 
+ 
     	 </td>
         
     	
