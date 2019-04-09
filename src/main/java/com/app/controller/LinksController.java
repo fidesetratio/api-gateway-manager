@@ -121,6 +121,29 @@ public class LinksController {
 	
 	@RequestMapping(value="/update-form-submit",method=RequestMethod.POST)
 	public String updateSubmit(@Valid @ModelAttribute("linkupdate")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText,@RequestParam(name = "sensitiveHeaders") String sensitiveHeaders){
+		if(link !=  null) {
+			if(!roleText.trim().equals("")) {
+				List<String> roles = new ArrayList<String>(Arrays.asList(roleText.split(";")));
+				link.setRoles(roles);
+			};
+			if(!sensitiveHeaders.trim().equals("")) {
+				List<String> senheaders = new ArrayList<String>(Arrays.asList(sensitiveHeaders.split(";")));
+				link.setSensitiveHeaders(senheaders);
+			}
+		}
+		
+		if(link.getCategoryId()>0) {
+			RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+			List<String> rt = new ArrayList<String>();
+			for(Roles r:category.getRoles()) {
+				rt.add(r.getRoleName());
+			}
+			if(rt.size()>0) {
+				link.setRoles(rt);
+			}
+			
+		}
+		
 		if (bindingResult.hasErrors()) {
 			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
@@ -131,8 +154,9 @@ public class LinksController {
 			
 		}else {
 			
-	//		linkRepository.save(link);
-	//		reload();
+			linkRepository.save(link);
+			reload();
+			System.out.println(link.getLinkId());
 		}
 	
 		return "fragments/updateLinks";
