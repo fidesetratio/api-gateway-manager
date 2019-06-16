@@ -1,32 +1,49 @@
 package com.app.rest.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class ClientDetails {
 	
+	@NotEmpty(message="Please Enter your clientId")
+	@Size(min=4, max=32, message="Client Id must be between 4 and 32 characters")
 	private String clientId;
 
+	@NotEmpty(message="Please enter your resourceId")
 	private String resourceIds;
 	
+
+	@NotEmpty(message="Please Enter your clientSecret")
+	@Size(min=4, max=32, message="Client Secret must be between 4 and 32 characters")
 	private String clientSecret;
 
+
+	@NotEmpty(message = "Please enter your scope such as : (read,write)")
 	private String scope;
 
+	@NotEmpty(message = "Please enter your grant types such as : (password,refresh_token,authorization_code)")
 	private String authorizationGrantTypes;
 	
 
 	private String webServerRedirectUri;
 
 	private String authorities;
-
+	
 	private int accessTokenValidity;
 
 	private int refreshTokenValidity;
 
+	@NotEmpty(message = "Please enter your additional Information.")
 	private String additionalInformation;
 
 	private int autoApprove;
+	
+	public ClientDetails()
+	{
+		this.autoApprove = 0;
+		this.accessTokenValidity = 0;
+		this.refreshTokenValidity = 0;
+	}
 
 	public String getClientId() {
 		return clientId;

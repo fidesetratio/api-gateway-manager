@@ -1,0 +1,145 @@
+
+<form id="addprovider" class="form-horizontal" th:object="${clientDetail}"  th:action="@{'/provider/submit'}">
+
+<div th:if="${msg != null}" class="alert alert-success alert-dismissible" >
+	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span th:text="${msg}"></span>
+</div>
+
+<div class="row">
+<div class="text-right">
+  	<button type="button" onclick="submitclient('addprovider')" class="btn btn-primary">Save</button>
+	<a th:href="@{'/provider/providerlist'}" class="btn btn-primary" role="button">Cancel</a>
+
+</div>
+</div>
+ <div class="row">
+<div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="serviceId">Client Id</label>
+  <div th:classappend="${#fields.hasErrors('clientId')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" id="serviceId" placeholder="Client Id" th:field="*{clientId}" />
+				   <span th:if="${#fields.hasErrors('clientId')}" class="help-block" th:errors="*{clientId}"></span>
+					</div>
+                    
+ 
+        </div>
+        
+<div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="resourceIds">Resource Id</label>
+  <div th:classappend="${#fields.hasErrors('resourceIds')} ? 'input-icon right has-error' : ''">
+                        <input type="text" class="form-control" id="resourceIds" placeholder="Resource Id" th:field="*{resourceIds}" />
+				   <span th:if="${#fields.hasErrors('resourceIds')}" class="help-block" th:errors="*{resourceIds}"></span>
+					</div>
+                    
+ 
+        </div>
+        
+                
+        
+        <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Client Secret</label>
+ <div th:classappend="${#fields.hasErrors('clientSecret')} ? 'input-icon right has-error' : ''">
+             <input type="text" class="form-control" id="clientSecret" placeholder="Client Secret" th:field="*{clientSecret}" />
+             <span th:if="${#fields.hasErrors('clientSecret')}" class="help-block" th:errors="*{clientSecret}"></span>
+            </div>
+        </div>
+        
+        
+        <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Scope</label>
+ <div th:classappend="${#fields.hasErrors('scope')} ? 'input-icon right has-error' : ''">
+            <input type="text" class="form-control" id="scope" placeholder="Scope" th:field="*{scope}" />
+             <span th:if="${#fields.hasErrors('scope')}" class="help-block" th:errors="*{scope}"></span>
+          </div>
+        </div>
+        
+          <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Authorization Grant Types</label>
+ <div th:classappend="${#fields.hasErrors('authorizationGrantTypes')} ? 'input-icon right has-error' : ''">
+ 
+            <input type="text" class="form-control" id="authorizationGrantTypes" placeholder="Authorization Grant Types" th:field="*{authorizationGrantTypes}" />
+              <span th:if="${#fields.hasErrors('authorizationGrantTypes')}" class="help-block" th:errors="*{authorizationGrantTypes}"></span>
+       	
+            </div>
+        </div>
+          <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Web Server Redirect Uri</label>
+ <div th:classappend="${#fields.hasErrors('webServerRedirectUri')} ? 'input-icon right has-error' : ''">
+ 
+            <input type="text" class="form-control" id="webServerRedirectUri" placeholder="Web Server Redirect Uri" th:field="*{webServerRedirectUri}" />
+              <span th:if="${#fields.hasErrors('webServerRedirectUri')}" class="help-block" th:errors="*{webServerRedirectUri}"></span>
+       	    		   
+			
+            </div>
+        </div>
+          
+          <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Authorieties</label>
+ <div th:classappend="${#fields.hasErrors('authorities')} ? 'input-icon right has-error' : ''">
+ 
+            <input type="text" class="form-control" id="authorities" placeholder="Authorities" th:field="*{authorities}" >
+              <span th:if="${#fields.hasErrors('authorities')}" class="help-block" th:errors="*{authorities}"></span>
+       	    		   
+			
+            </div>
+        </div>
+              
+          <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Expires Refresh</label>
+ <div th:classappend="${#fields.hasErrors('refreshTokenValidity')} ? 'input-icon right has-error' : ''">
+ 
+            <input type="text" class="form-control" id="refreshTokenValidity" placeholder="Refresh Token Validaty" th:field="*{refreshTokenValidity}">
+            	     <span th:if="${#fields.hasErrors('refreshTokenValidity')}" class="help-block" th:errors="*{refreshTokenValidity}"></span>
+       	 	   
+			
+            </div>
+        </div>
+        
+            <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Expires Token</label>
+ <div th:classappend="${#fields.hasErrors('accessTokenValidity')} ? 'input-icon right has-error' : ''">
+            <input type="text" class="form-control" id="accessTokenValidity" placeholder="Access Token Validity" th:field="*{accessTokenValidity}">
+            	     <span th:if="${#fields.hasErrors('accessTokenValidity')}" class="help-block" th:errors="*{accessTokenValidity}"></span>
+       	 			   
+			
+            </div>
+            
+        </div>
+        
+        
+              <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            <label for="context">Additional Information</label>
+ <div th:classappend="${#fields.hasErrors('additionalInformation')} ? 'input-icon right has-error' : ''">
+            <input type="text" class="form-control" id="additionalInformation" placeholder="Additional Information" th:field="*{additionalInformation}">
+            	    <span th:if="${#fields.hasErrors('additionalInformation')}" class="help-block" th:errors="*{additionalInformation}"></span>
+       	 			   
+			
+            </div>
+            
+        </div>
+          <div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6">
+            
+        <label for="active">Auto Approved</label>
+		     
+			
+			<select class="form-control" th:field="*{autoApprove}">
+		   	  <option th:value="1" data-th-field="*{autoApprove}" th:selected="${autoApprove==1}">true</option>
+		   	  <option th:value="0" data-th-field="*{autoApprove}" th:selected="${autoApprove==0}">false</option>
+			</select>
+	
+        </div>
+        
+</div>
+
+	<div class="row">
+	
+
+<div class="text-right">
+  	<button type="button" onclick="submitclient('addprovider')" class="btn btn-primary">Save</button>
+	<a th:href="@{'/provider/providerlist'}" class="btn btn-primary" role="button">Cancel</a>
+
+</div>
+</div>
+	
+
+</form>

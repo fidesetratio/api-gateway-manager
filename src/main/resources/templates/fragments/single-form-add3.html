@@ -1,0 +1,86 @@
+<div>
+
+<div class="single-warning"></div>
+
+     	<div class="row">
+     <div class="text-right button-content">
+  	<button type="button" onclick="submitclient('addprovider')" class="btn btn-primary button-submit">Save</button>
+	<a th:href="@{'/provider/providerlist'}" class="btn btn-primary button-cancel" role="button">Cancel</a>
+	</div>
+	</div>
+
+
+    <form class="signup-form" action="/register" method="post">
+        
+    			<table border="0" class="form-table-old">
+     						<tr valign="top"><td>Input name</td><td>:</td><td><input type="text" name="text" value=""></td><td>Input name</td><td>:</td><td><input type="text" name="text" value=""></td></tr>
+     						<tr valign="top"><td>Description</td><td>:</td><td><textarea cols="20"/></td></tr>
+     						<tr valign="top"><td>Sex</td><td>:</td><td><select><option>Male</option><option>Female</option></select></td></tr>
+     						<tr valign="top"><td>Hobbies</td><td>:</td><td> <input type="checkbox" name="vehicle1" value="Bike"> I have a bike<br>
+<input type="checkbox" name="vehicle2" value="Car"> I have a car<br>
+<input type="checkbox" name="vehicle3" value="Boat" checked> I have a boat<br> </td></tr>
+<tr valign="top"><td colspan="4">Details History<td></tr>
+  <tr valign="top"><td colspan="10">
+  	<table class="greyGridTable">
+<thead>
+<tr>
+<th>head1</th>
+<th>head2</th>
+<th>head3</th>
+<th>head4</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<td>foot1</td>
+<td>foot2</td>
+<td>foot3</td>
+<td>foot4</td>
+</tr>
+</tfoot>
+<tbody>
+<tr>
+<td>cell1_1</td>
+<td>cell2_1</td>
+<td>cell3_1</td>
+<td>cell4_1</td>
+</tr>
+<tr>
+<td>cell1_2</td>
+<td>cell2_2</td>
+<td>cell3_2</td>
+<td>cell4_2</td>
+</tr>
+<tr>
+<td>cell1_3</td>
+<td>cell2_3</td>
+<td>cell3_3</td>
+<td>cell4_3</td>
+</tr>
+<tr>
+<td>cell1_4</td>
+<td>cell2_4</td>
+<td>cell3_4</td>
+<td>cell4_4</td>
+</tr>
+</tbody>
+</table>
+
+
+    
+    
+  
+  <td></tr>   						
+     					</table>
+     	</form>
+     	
+     	     	<div class="row">
+	
+
+<div class="text-right button-content">
+  	<button type="button" onclick="submitclient('addprovider')" class="btn btn-primary button-submit">Save</button>
+	<a th:href="@{'/provider/providerlist'}" class="btn btn-primary button-cancel" role="button">Cancel</a>
+
+</div>
+</div>
+</div>

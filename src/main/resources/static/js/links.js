@@ -35,7 +35,7 @@ function openAddLink(){
 
 
 
-function submitajax(id){$
+function submitajax(id){
 	$form = $("#"+id);
 
 $.ajax({
@@ -47,9 +47,7 @@ $.ajax({
     	
     	// if the response contains any errors, replace the form
       if (r.find('.has-error').length) {
-    	  
-    	  
-    	  var roleCategory=r.find("#roleCategory");
+    	  	var roleCategory=r.find("#roleCategory");
     		var roleText=r.find("#roleText");
     		
     		var pickup = r.find("#rolePickup");

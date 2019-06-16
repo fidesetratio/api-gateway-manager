@@ -1,0 +1,36 @@
+<div>
+
+<div class="single-warning"></div>
+
+	<div class="row">
+	
+
+<div class="text-right button-content">
+  	<button type="button" onclick="submitclient('addprovider')" class="btn btn-primary button-submit">Save</button>
+	<a th:href="@{'/clientuser/index'}" class="btn btn-primary button-cancel" role="button">Cancel</a>
+
+</div>
+</div>
+    <form class="signup-form" action="/register" method="post">
+    
+    			<table border="0" class="form-table-old">
+    				<tr valign="top"><td>Client Id</td><td>:</td><td><input type="text" name="text" value=""><p></p></td><td>Resource Id</td><td>:</td><td><input type="text" name="text" value=""><p></p></td></tr>
+    				<tr valign="top"><td>Client Secret</td><td>:</td><td><input type="text" name="text" value=""><p></p></td><td>Scope</td><td>:</td><td><input type="text" name="text" value=""><p></p></td></tr>
+    				<tr valign="top"><td>Authorization Grant Types</td><td>:</td><td><input type="text" name="text" value=""><p></p></td><td>Web Server Redirect Uri</td><td>:</td><td><input type="text" name="text" value=""><p></p></td></tr>
+    				<tr valign="top"><td>Authorieties</td><td>:</td><td><input type="text" name="text" value=""><p></p></td><td>Expires Refresh</td><td>:</td><td><input type="text" name="text" value=""><p></p></td></tr>
+    			<tr valign="top"><td>Expires Token</td><td>:</td><td><input type="text" name="text" value=""><p></p></td><td>Additional Information</td><td>:</td><td><input type="text" name="text" value=""><p></p></td></tr>
+    				<tr valign="top"><td>Auto Approved</td><td>:</td><td><select><option>Yes</option><option>No</option></select><p></p></td><td colspan="2"></td></tr>
+    		
+    			</table>
+    </form>
+ 	<div class="row">
+	
+
+<div class="text-right button-content">
+  	<button type="button" onclick="submitclient('addprovider')" class="btn btn-primary button-submit">Save</button>
+	<a th:href="@{'/clientuser/index'}" class="btn btn-primary button-cancel" role="button">Cancel</a>
+
+</div>
+</div>
+
+</div>
