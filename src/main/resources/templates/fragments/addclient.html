@@ -1,0 +1,87 @@
+	<div class="col-lg-12 well">
+			
+ 
+ 
+	<div class="row">
+				<form method="POST"  th:object="${clientDetail}" th:action="@{'/client/add/submit'}">
+			
+					<div id="home" class="col-sm-12 tab-pane fade in active">
+						<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('clientId')} ? 'has-warning' : ''">
+								<label>Client ID</label>
+								<input type="text" placeholder="Enter Client ID Here ." class="form-control" th:field="*{clientId}" >
+								 <span th:if="${#fields.hasErrors('clientId')}" class="help-block" th:errors="*{clientId}"></span>
+							</div>
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('resourceIds')} ? 'has-warning' : ''">
+								<label>Resource Id</label>
+								<input type="text" placeholder="Enter Resource Id.." class="form-control" th:field="*{resourceIds}">
+								<span th:if="${#fields.hasErrors('resourceIds')}" class="help-block" th:errors="*{resourceIds}"></span>
+							</div>
+						</div>		
+							<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('clientSecret')} ? 'has-warning' : ''">
+								<label>Client Secret</label>
+								<input type="text" placeholder="Enter Client Secret Here ." class="form-control" th:field="*{clientSecret}" >
+								 <span th:if="${#fields.hasErrors('clientSecret')}" class="help-block" th:errors="*{clientSecret}"></span>
+							</div>
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('scope')} ? 'has-warning' : ''">
+								<label>Scope</label>
+								<input type="text" placeholder="Enter Scope Here.." class="form-control" th:field="*{scope}">
+								<span th:if="${#fields.hasErrors('scope')}" class="help-block" th:errors="*{scope}"></span>
+							</div>
+						</div>	
+						
+							<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('webServerRedirectUri')} ? 'has-warning' : ''">
+								<label>Redirect Uri</label>
+								<input type="text" placeholder="Enter Web server Redirect Here ." class="form-control" th:field="*{webServerRedirectUri}" >
+								 <span th:if="${#fields.hasErrors('webServerRedirectUri')}" class="help-block" th:errors="*{webServerRedirectUri}"></span>
+							</div>
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('authorizationGrantTypes')} ? 'has-warning' : ''">
+								<label>Authorization Grant Types</label>
+								<input type="text" placeholder="Enter Authorization Grant Types Here.." class="form-control" th:field="*{authorizationGrantTypes}">
+								<span th:if="${#fields.hasErrors('authorities')}" class="help-block" th:errors="*{authorizationGrantTypes}"></span>
+							</div>
+						</div>	
+						
+							<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('refreshTokenValidity')} ? 'has-warning' : ''">
+								<label>Expires Refresh</label>
+								<input type="text" placeholder="Enter Refresh Token Validity Here ." class="form-control" th:field="*{refreshTokenValidity}" >
+								 <span th:if="${#fields.hasErrors('refreshTokenValidity')}" class="help-block" th:errors="*{refreshTokenValidity}"></span>
+							</div>
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('authorities')} ? 'has-warning' : ''">
+								<label>Authorities</label>
+								<input type="text" placeholder="Enter Authorities Here.." class="form-control" th:field="*{authorities}">
+								<span th:if="${#fields.hasErrors('authorities')}" class="help-block" th:errors="*{authorities}"></span>
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('accessTokenValidity')} ? 'has-warning' : ''">
+								<label>Expires Token</label>
+								<input type="text" placeholder="Enter Expires Token Here ." class="form-control" th:field="*{accessTokenValidity}" >
+								 <span th:if="${#fields.hasErrors('accessTokenValidity')}" class="help-block" th:errors="*{accessTokenValidity}"></span>
+							</div>
+							<div class="col-sm-6 form-group">
+								<label>Auto Approved</label>
+								<select class="form-control" th:field="*{autoApprove}">
+							   	  <option th:value="1" data-th-field="*{autoApprove}" th:selected="${autoApprove==1}">true</option>
+							   	  <option th:value="0" data-th-field="*{autoApprove}" th:selected="${autoApprove==0}">false</option>
+								</select>
+													
+							</div>
+						</div>	
+						
+						
+									
+						<div class="form-group" th:classappend="${#fields.hasErrors('additionalInformation')} ? 'has-warning' : ''">
+							<label>Additional Information</label>
+							<textarea placeholder="Enter Additional Information.." th:field="*{additionalInformation}" rows="3" class="form-control"></textarea>
+							 <span th:if="${#fields.hasErrors('additionalInformation')}" class="help-block" th:errors="*{additionalInformation}"></span>
+							 
+						</div>	
+					</div>
+					
+					</div>
+				</form> 
+</div>
