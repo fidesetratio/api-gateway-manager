@@ -35,9 +35,7 @@ public class CategoryController {
 		RoleCategory roleCategory = new RoleCategory();
 		model.addAttribute("roleCategory",roleCategory);
 		List<RoleCategory> roleCategories = (List<RoleCategory>)roleCategoryRepo.findAll();
-		
 		model.addAttribute("roleCategories",roleCategories);
-		
 		return "category-management";
 	}
 	
