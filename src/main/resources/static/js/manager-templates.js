@@ -1,13 +1,93 @@
 $(document).ready(function(){
 	
 	
+	/*
+	 $('#example').DataTable( {
+		   columnDefs: [ {
+	            orderable: false,
+	            className: 'select-checkbox',
+	            render: function(data, type, row, meta){
+	                if(type === 'display'){
+	                   data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+	                }
+
+	                return data;
+	             },
+	             
+	             checkboxes: {
+	                 'selectRow': true,
+	                 'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+	              }
+	            
+	            
+	        } ],
+	        select: {
+	            style:    'os',
+	            selector: 'td:first-child'
+	        },
+	        order: [[ 1, 'asc' ]]
+	    } );
+	*/
+	 
+	  var table = $('#example').DataTable({
+	      ajax: 'https://api.myjson.com/bins/1us28',
+	  
+	      columnDefs: [
+	         {
+	            targets: 0,
+	            render: function(data, type, row, meta){
+	               if(type === 'display'){
+	                  data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+	               }
+
+	               return data;
+	            },
+	            checkboxes: {
+	               selectRow: true,
+	               selectAllRender: '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+	            }
+	         }
+	      ],
+	      select: {
+	          style: 'multi'
+	       },
+	      order: [[1, 'asc']],
+	      dom: 'Bfrtip',
+	      buttons: [
+	            {
+	                text: 'My button',
+	                action: function ( e, dt, node, config ) {
+	                	  var count = table.rows( { selected: true } ).count();
+	                	  var rows_selected = table.column(0).checkboxes.selected();
+	                	  $.each(rows_selected, function(index, rowId){
+	                		 alert(rowId); 
+	                	  });
+	              /*  	  alert(JSON.stringify(rows_selected));*/
+	            		  //var selectedTab = ttabs.tabs('option','active');
+	            		  //alert(JSON.stringify(rows_selected));
+	                }
+	            }
+	        ]
+	   });
+	  
+	  
+	  
+	  
+	    table
+        .on( 'select', function ( e, dt, type, indexes ) {
+            var rowData = table.rows( indexes ).data().toArray();
+            alert('se');
+          //  events.prepend( '<div><b>'+type+' selection</b> - '+JSON.stringify( rowData )+'</div>' );
+        } )
+        .on( 'deselect', function ( e, dt, type, indexes ) {
+            var rowData = table.rows( indexes ).data().toArray();
+           // events.prepend( '<div><b>'+type+' <i>de</i>selection</b> - '+JSON.stringify( rowData )+'</div>' );
+        } );
+	  
+	  
+	  
 	
-	
-	
-	$(".simpletable").simpletable();
-	
-	
-	var table = $('#datatable-fixed-header').DataTable({
+	/*var table1 = $('#datatable-fixed-header').DataTable({
         "processing" : true,
         "serverSide" : true,
         "columns": [ // NOTE: you need to specify names of fields as ids for the columns
@@ -131,7 +211,7 @@ $(document).ready(function(){
 		
 		
 	    } );
-	 /* table.on( 'select deselect', function () {
+	  table.on( 'select deselect', function () {
 	        var selectedRows = table.rows( { selected: true } ).count();
 	        table.button( 0 ).enable( selectedRows === 1 );
 	        table.button( 1 ).enable( selectedRows > 0 );
