@@ -17,7 +17,7 @@
         // Apply options
         return this.each(function(){
         	var $this = $(this);
-
+        
         	
         	var parent = $(this).parent();
 
@@ -27,6 +27,8 @@
         	var url = $(this).attr("table-url");
         	var urllist = url+"/lists";
         	var urladd = url+"/add";
+        	var urlremove = url+"/remove";
+        	var urlmodify = url+"/modify";
         	content.find(".pick").prop('checked',false);
         	
         	
@@ -38,10 +40,7 @@
         		if($(this).hasClass("pick")){
         	
         				var obj = {
-        						data : name,
-        						render:function(data,type,row){
-        							 return '<input type="checkbox" class="editor-active">';
-        							}
+        						data : name
         					};
         				
         				columns.push(obj);
@@ -73,16 +72,117 @@
         	    
         	}
            
+        	var showForm = function(ket,url,data = []){
+        		
+        		var title = "Add Form";
+        		if (ket == 0){
+        			title = "Add Form";
+        		}else if(ket == 1){
+        			title = "Modify Form";
+        		}
+        		
+        		var content ='url:'+url;
+        		if(ket == 0){
+        			content ='url:'+url;
+        		}else if(ket == 1){
+        		
+        			
+        			content	= function(){
+        				var self = this;
+        			
+			        	return 	$.ajax({
+			        			    url: url,
+			        			    method: 'POST',
+			      				    contentType: 'application/json',
+			      				    data: data
+			      				   
+			      				}).done(function (response){
+			      					self.setContent(response);
+			        			}).fail(function(xhr, textStatus, errorThrown){
+			        				self.setContent(textStatus);
+			        	        });
+        				
+        			};
+      			
+        		}
+        		
+        		
+        		$.confirm(
+             			{
+             				title: title,
+         			    	type: 'blue',
+         			        content: content,
+         			        onContentReady: function () {
+         			        	     var content = this.$content;
+					            	 var form = content.find("form");
+					            	 form.find("input:first").focus();
+         			        	
+         			        }, 
+         			        boxWidth: '80%',
+         			        useBootstrap: false,
+         			        buttons: {
+         			            submit:function(){
+         			             var self = this;
+					            	 var content = this.$content;
+					            	 var form = content.find("form");
+					            	 var action= form.attr("action");
+					            	 var currentContent = this;
+					            	
+					            	 $.ajax({
+					            		url: action,
+					            	    type: 'post',
+					            	    data: form.serialize(),
+					            	    success: function(response) {
+					            	    	var ct = $(response);
+					            	        if (ct.find('.has-warning').length) {
+    					            	    	currentContent.setContent(ct);
+    					            	    }else{
+    					            	    	alertmessage("success yo").prependTo(parent);
+    					            	    	currentContent.close();
+    					            	    }
+					            	    }
+					            	
+					            	});
+					            	 
+         			            	return false;
+         			            },
+         			            close: {
+     			            		keys:['esc'],
+     			            		action : function(){
+     			            			 
+     			            		}
+         			            }
+         			        }
+             			}   			
+             		);
+        		
+        		
+        	};
         	
         	var table = $(this).DataTable(
         			
         			{	
-        				 columnDefs: [ {
-        			            orderable: false,
-        			            className: 'select-checkbox',
-        			            targets:   0
-        			        } ],
-        			        
+        				 columnDefs: [
+        			         {
+        				            targets: 0,
+        				            render: function(data, type, row, meta){
+        				               if(type === 'display'){
+        				                  data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+        				               }
+
+        				               return data;
+        				            },
+        				            checkboxes: {
+        				               selectRow: true,
+        				               selectAllRender: '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+        				            }
+        				         }
+        				      ],
+        				      
+        				      select: {
+        				          style: 'multi'
+        				       },
+        				       order: [[1, 'asc']],
         				"processing" : true, 
         		        "serverSide" : true,
         		        "columns" : columns,
@@ -103,78 +203,74 @@
         		        	 {
         		                 text: 'Add',                
         		                 action: function ( e, dt, node, config ) {
-        		                	$.confirm(
-        		                 			{
-        		                 				title: "Add form",
-        		             			    	type: 'blue',
-        		             			        content: 'url:'+urladd,
-        		             			        onContentReady: function () {
-        		             			        	 var content = this.$content;
-   		         					            	 var form = content.find("form");
-   		         					            	 form.find("input:first").focus();
-        		             			        	
-        		             			        }, 
-        		             			        boxWidth: '80%',
-        		             			       useBootstrap: false,
-        		             			        buttons: {
-        		             			            submit:function(){
-        		             			             var self = this;
-   		         					            	 var content = this.$content;
-   		         					            	 var form = content.find("form");
-   		         					            	 var action= form.attr("action");
-   		         					            	 var currentContent = this;
-   		         					            	
-   		         					            	 $.ajax({
-   		         					            		url: action,
-   		         					            	    type: 'post',
-   		         					            	    data: form.serialize(),
-   		         					            	    success: function(response) {
-   		         					            	    	var ct = $(response);
-   		         					            	        if (ct.find('.has-warning').length) {
-	   		         					            	    	currentContent.setContent(ct);
-	   		         					            	    }else{
-	   		         					            	    alertmessage("success yo").prependTo(parent);
-	   		         					            	    	currentContent.close();
-	   		         					            	    }
-   		         					            	    }
-   		         					            	
-   		         					            	});
-   		         					            	 
-        		             			            	return false;
-        		             			            },
-        		             			            close: {
-        		         			            		keys:['esc'],
-        		         			            		action : function(){
-        		         			            			 
-        		         			            		}
-        		             			            }
-        		             			        }
-        		                 			}   			
-        		                 		);
-        		                 	
-        		                 	
+        		                	 showForm(0,urladd);
+        		                 }
+        		             },
+        		             {
+        		                 text: 'Modify',                
+        		                 action: function ( e, dt, node, config ) {
+        		                   	 var modify = dt.rows( { selected: true });
+        		                	 var length = modify.data().length;
+        		                	
+        		                	 if(length>=2){
+        		                		    $.alert({
+        		                		        title: 'Warning!',
+        		                		        content: 'You can not pick more than one',
+        		                		        type: 'red'
+        		                		    });
+        		                	 }else{
+        		                			var selectedData = JSON.stringify(modify.data().toArray()[0]);
+        		                		 
+        		                		 showForm(1,urlmodify,selectedData);
+        		                		 
+        		                		 
+        		                		 
+        		                	 }
+        		                 
         		                 }
         		             },
         		             {
         		                 text: 'Remove',                
         		                 action: function ( e, dt, node, config ) {
-        		                	 	
-        		                	 var data = content.find('input.editor-active[type="checkbox"]:checked');
-        		                	 var length = data.length;
-        		                	 var d = [];
-        		                	 var parent = data.parent().parent();
-        		                	
-        		                /*	 if(length>=1){
-        		                		 parent.each(function(){
-        		                			 $(this).find('td').each(function(){
-        		                				 alert($(this).text());
-        		                			 })
-        		                		 })
-        		                		  
-        		                	 }*/
-        		                //	 table.row('.selected').remove().draw(false);
-        		                	 
-        		                	 //alert(table.row('.selected').remove());
+        		                	var deleteRemove = dt.rows( { selected: true });
+        		               
+        		                	var selectedData = JSON.stringify(deleteRemove.data().toArray());
+        		                    $.confirm({
+        		                        title: 'Are you want to delete this Item?',
+        		                        content: 'Are you want to delete this Item?.',
+        		                        type: 'red',
+        		                        typeAnimated: true,
+        		                        buttons: {
+        		                            tryAgain: {
+        		                                text: 'Ok',
+        		                                btnClass: 'btn-red',
+        		                                action: function(){
+        		                                	var data = selectedData;
+        		                                
+        		                                	$.ajax({
+        		                      				    url: urlremove,
+        		                      				    type: 'POST',
+        		                      				    dataType: 'json',
+        		                      				    contentType: 'application/json',
+        		                      				    data: data,
+        		                      				    processData: false,
+        		                      				    success: function( data, textStatus, jQxhr) {
+        		                      				    		if(data.response==0){
+        		                      				    			deleteRemove.remove().draw(false);	
+        		                      				    		}
+        		                      				    }
+        		                      				});
+        		                      			
+        		                                	
+        		                                	
+        		                                	
+        		                                }
+        		                            },
+        		                            close: function () {
+        		                            }
+        		                        }
+        		                    });
+        		              
         		                	 
         		                	 
         		                 }
@@ -189,69 +285,38 @@
         	
         	
 
-        	
+        	table.buttons(1).disable();
+        	table.buttons(2).disable();
 
         	
-        	table.on( 'draw', function () {
-        	    //alert( 'Redraw occurred at: '+new Date().getTime() );
-        		table.buttons(1).disable();
-        	
- /*       		content.find(".pick").prop('checked',false);
-            	content.find(".pick").on('change', function() {
-            		var status;
-            		//alert($(this).prop('checked'));
-            		
-            		if($(this).prop("checked")==false){
-            			
-            			content.find(".pick").prop('checked',true);
-            		}else{
-            			content.find(".pick").prop('checked',false);
-                			
-            		}
-        			status =  $(this).prop("checked");
-            		content.find('input.editor-active[type="checkbox"]').prop('checked',status);
-            		if(status){
-            			
-            			table.buttons(1).enable();
-            		}else{
-            			table.buttons(1).disable();
-            		}
-            	});
-            	*/
-            	
-        		
-        		$(this).find('.editor-active').click(function(){
-        				var length = content.find('input.editor-active[type="checkbox"]:checked').length;
-        				if(length>=1){
-        					table.buttons(1).enable();
-        				}else{
-        					table.buttons(1).disable()
-        				}
-        				
-        			
-        		});
-        		
-        		content.find("tbody").on( 'click', 'tr', function () {
-        		        if ( $(this).hasClass('selected') ) {
-        		            $(this).removeClass('selected');
-        		        }
-        		        else {
-        		            table.$('tr.selected').removeClass('selected');
-        		            $(this).addClass('selected');
-        		        }
-        		    } );
-        		 
-        		
-        	    
+       /* 	table.on( 'draw', function () {
+        			table.buttons(1).disable();
+        			alert("dra");
         	} );
+        	*/
+        
         	
-        	/*
-        	//$(this).find('editor-active').click([''])
-        	//table.buttons().disable();
-            table.on( 'select deselect', function () {
-            	 var selectedRows = table.rows( { selected: true } ).count();
-            	 alert(selectedRows);
-            });*/
+        	 table
+             .on( 'select', function ( e, dt, type, indexes ) {
+                 var rowData = table.rows( indexes ).data().toArray();
+               
+            	 table.buttons(1).enable();
+            	 table.buttons(2).enable();
+            
+             	
+            
+             } )
+             .on( 'deselect', function ( e, dt, type, indexes ) {
+                 var rowData = table.rows( indexes ).data().toArray();
+            	 table.buttons(1).disable();
+            	 table.buttons(2).disable();
+             } );
+     	  
+     	  
+     	  
+        	 
+        	 
+        	 
         });
         
         

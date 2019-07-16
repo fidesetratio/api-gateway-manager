@@ -1,8 +1,13 @@
 package com.app.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import com.app.controller.datatables.models.PaginationCriteria;
 import com.app.controller.datatables.models.TablePage;
 import com.app.rest.model.ClientDetails;
+import com.app.rest.model.EntityResponse;
 
 @Controller
 @RequestMapping("/client")
@@ -25,7 +31,7 @@ public class ClientController extends SingleTemplateController  {
 
 	private static String uri = "http://localhost:8787/";
 	
-	
+	private static Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
 	public String index(HttpServletRequest request, Model model) {
 		String data= super.index(request, model);
@@ -34,25 +40,11 @@ public class ClientController extends SingleTemplateController  {
 		model.addAttribute("providercontent","fragments/"+target);
 		return data;
 	}
-	
-	
-	
-	/*
-	 * @RequestMapping(value="/liststwo",method=RequestMethod.POST,produces=
-	 * "application/json") public @ResponseBody TablePage products(@RequestBody
-	 * PaginationCriteria treq) { System.out.println("patar"); TablePaginator
-	 * paginator = new SimplePaginator(new ManagerAuthServices(uri +
-	 * "manager/listclients")); TablePage tablePage = paginator.getPage(treq);
-	 * return tablePage; }
-	 */
-	
+
 
 	@RequestMapping(value="/lists",method=RequestMethod.POST,produces="application/json")
 	public @ResponseBody TablePage lists(@RequestBody PaginationCriteria treq) {
 		RestTemplate restTemplate = new RestTemplate();
-		
-		
-		
 		ResponseEntity<TablePage> response   = restTemplate.postForEntity(uri + "manager/listclientstable", treq, TablePage.class);
 		return response.getBody();
 	}
@@ -77,4 +69,28 @@ public class ClientController extends SingleTemplateController  {
 		System.out.println("patar timotius");		
 		return "fragments/ok";
 	}
+	
+	
+	@RequestMapping(value="/remove",method=RequestMethod.POST,produces="application/json")
+	public @ResponseBody EntityResponse remove(@RequestBody List<ClientDetails> list) {
+		
+		for(ClientDetails c:list) {
+			logger.info("c="+c.getClientId());
+				
+		}
+		EntityResponse response =  new EntityResponse();
+		return response;
+	}
+	
+	
+	
+	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
+            MediaType.APPLICATION_XHTML_XML_VALUE })
+	public String modify(@RequestBody ClientDetails detail,Model model){
+			logger.info("modify"+detail.getClientId());
+			model.addAttribute("clientDetail", new ClientDetails());
+			return "fragments/addclient";
+	}
+	
+	
 }
