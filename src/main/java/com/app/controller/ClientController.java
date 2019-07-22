@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,15 @@ public class ClientController extends SingleTemplateController  {
 		String data= super.index(request, model);
 		String target = getTarget(request, "client-lists");
 		model.addAttribute("titleprovider", "Client Lists");
+		List<String> headers = new ArrayList<String>();
+		headers.add("Client Id");
+		headers.add("Client Id");
+		headers.add("ResourceIds");
+		headers.add("Client Secret");
+		headers.add("AccessTokenValidity");
+		model.addAttribute("headers", headers);
+		model.addAttribute("table_url", "/client");
+		model.addAttribute("button","true");
 		model.addAttribute("providercontent","fragments/"+target);
 		return data;
 	}
@@ -73,12 +83,14 @@ public class ClientController extends SingleTemplateController  {
 	
 	@RequestMapping(value="/remove",method=RequestMethod.POST,produces="application/json")
 	public @ResponseBody EntityResponse remove(@RequestBody List<ClientDetails> list) {
-		
+		logger.info("remove client id");
+		System.out.println("fun and action");
 		for(ClientDetails c:list) {
 			logger.info("c="+c.getClientId());
 				
 		}
 		EntityResponse response =  new EntityResponse();
+		response.setMessage("hehhe");
 		return response;
 	}
 	

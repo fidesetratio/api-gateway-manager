@@ -25,12 +25,20 @@
     		var content = $(this);
         	var columns = [];
         	var url = $(this).attr("table-url");
+
+        	var buttonFlag = "false";
+        	
+        	if($(this).attr("button")){
+        		buttonFlag = $(this).attr("button");
+        	}
+        	
+        	
         	var urllist = url+"/lists";
         	var urladd = url+"/add";
         	var urlremove = url+"/remove";
         	var urlmodify = url+"/modify";
         	content.find(".pick").prop('checked',false);
-        	
+        
         	
         	$(this).find("thead > tr > th").each(function(){
         		var name = $(this).text();
@@ -246,7 +254,7 @@
         		                                btnClass: 'btn-red',
         		                                action: function(){
         		                                	var data = selectedData;
-        		                                
+        		                                	
         		                                	$.ajax({
         		                      				    url: urlremove,
         		                      				    type: 'POST',
@@ -255,6 +263,7 @@
         		                      				    data: data,
         		                      				    processData: false,
         		                      				    success: function( data, textStatus, jQxhr) {
+        		                      				    		alert(JSON.stringify(data));
         		                      				    		if(data.response==0){
         		                      				    			deleteRemove.remove().draw(false);	
         		                      				    		}
@@ -283,17 +292,14 @@
         		    
         	);
         	
-        	
+        	if(buttonFlag=="false"){   
+        		table.buttons().remove();
+        	};
 
         	table.buttons(1).disable();
         	table.buttons(2).disable();
 
-        	
-       /* 	table.on( 'draw', function () {
-        			table.buttons(1).disable();
-        			alert("dra");
-        	} );
-        	*/
+       
         
         	
         	 table
