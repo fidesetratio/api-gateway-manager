@@ -1,92 +1,136 @@
 package com.app.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import com.app.controller.datatables.SimplePaginator;
+import com.app.controller.datatables.TablePaginator;
+import com.app.controller.datatables.models.PaginationCriteria;
+import com.app.controller.datatables.models.TablePage;
+import com.app.controller.template.DataTablesWidget;
+import com.app.controller.template.SimpleCrud;
 import com.app.manager.model.RoleCategory;
-import com.app.manager.model.Roles;
-import com.app.manager.repo.RoleRepository;
 import com.app.manager.repo.RolesCategoriesRepository;
+import com.app.rest.model.ClientDetails;
+import com.app.rest.model.EntityResponse;
+import com.app.services.CategoryServiceTable;
 
 @Controller
 @RequestMapping("/category")
-public class CategoryController {
-	
-	@Autowired
-	private RolesCategoriesRepository roleCategoryRepo;
-	
+public class CategoryController  extends SimpleCrud{
 
 	@Autowired
-	private RoleRepository roleRepository;
+	private RolesCategoriesRepository repo;
 	
-	@RequestMapping("/category")
-	public String category(Model model){
-		RoleCategory roleCategory = new RoleCategory();
-		model.addAttribute("roleCategory",roleCategory);
-		List<RoleCategory> roleCategories = (List<RoleCategory>)roleCategoryRepo.findAll();
-		model.addAttribute("roleCategories",roleCategories);
-		return "category-management";
+	private Logger logger = LoggerFactory.getLogger(CategoryController.class);
+
+	@Override
+	public DataTablesWidget init() {
+		DataTablesWidget widget = new DataTablesWidget();
+		widget.setTitle("Category");
+		widget.setDestination("/category");
+		widget.addHeader("Role CategoryId");
+		widget.addHeader("Role CategoryId");
+		widget.addHeader("Category Name");
+		widget.addHeader("Category Description");
+		return widget;
 	}
-	
-	
-	@RequestMapping(value="/category-form-submit",method=RequestMethod.POST)
-	public String categorySubmit(@Valid @ModelAttribute("roleCategory")  RoleCategory roleCategory, BindingResult bindingResult, Model model){
-	
-		
-		if(roleCategory.getCategoryName() != null) {
-			RoleCategory r = roleCategoryRepo.findByCategoryName(roleCategory.getCategoryName().trim());
-			if(r != null) {
-				  bindingResult.rejectValue("categoryName", "error.categoryName",
-						  "Category Name already exist"); 
-						  
-			}
-		}
-		 
+
+	@Override
+	public TablePage listsPage(PaginationCriteria treq) {
+		TablePaginator paginator = new SimplePaginator(new CategoryServiceTable(repo));
+		TablePage tablePage =  paginator.getPage(treq);
+		return tablePage;
+	}
+
+	@RequestMapping(value="/add",method=RequestMethod.GET)
+	public String add(Model model){
+			model.addAttribute("roleCategory", new RoleCategory());
+			return "fragments/addcategory";
+	}
+
+	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
+	public String submit(@Valid @ModelAttribute("roleCategory")  RoleCategory roleCategory, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("roleCategory",roleCategory);
+			for(FieldError error:bindingResult.getFieldErrors()) {
+				System.out.println(error.getField()+":"+error.getDefaultMessage());
+			}
+			
+			model.addAttribute("roleCategory", roleCategory);
 			return "fragments/addcategory";
 		}
 		
-		roleCategoryRepo.save(roleCategory);
-		return "fragments/addcategory";
+		repo.save(roleCategory);
+		return "fragments/ok";
+	}
+	
+	
+	
+	
+	@RequestMapping(value="/remove",method=RequestMethod.POST,produces="application/json")
+	public @ResponseBody EntityResponse remove(@RequestBody  List<RoleCategory> list) {
+		logger.info("size:"+list.size());
+		for(RoleCategory details:list){
+			RoleCategory clientDetails = details;
+			repo.deleteById(clientDetails.getRoleCategoryId());
+		}
+		EntityResponse response = new EntityResponse();
+		return response;
 		
+		
+		
+	}
+
+	
+	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
+            MediaType.APPLICATION_XHTML_XML_VALUE })
+	public String modify(@RequestBody RoleCategory detail,Model model){
+			///logger.info("modify"+detail.getClientId());
+
+			RoleCategory d = repo.findByRoleCategoryId(detail.getRoleCategoryId());
+			
+			model.addAttribute("roleCategory", d);
+			return "fragments/modifycategory";
+	}
+	
+	
+
+	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
+	public String modifysubmit(@Valid @ModelAttribute("roleCategory")  RoleCategory roleCategory, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			logger.info("there is an error here");
+			for(FieldError error:bindingResult.getFieldErrors()) {
+				System.out.println(error.getField()+":"+error.getDefaultMessage());
+			};
+			
+			
+			model.addAttribute("roleCategory", roleCategory);
+			return "fragments/modifycategory";
+		}
+		
+		repo.save(roleCategory);
+		return "fragments/ok";
 	}
 	
 
-	@RequestMapping(value="/list-categories",method=RequestMethod.GET)
-	public String listCategories(Model model){
-		List<RoleCategory> links = new ArrayList<RoleCategory>();
-		links = (List<RoleCategory>)roleCategoryRepo.findAll();
-		model.addAttribute("roleCategories",links);
-		return "fragments/tablecategory";
-	}
 	
-	@RequestMapping(value="/delete-category",method=RequestMethod.GET)
-	public String deleteCategory(@RequestParam(value = "categoryId", required = false) Long categoryId, Model model){
-			if(categoryId != null) {
-				RoleCategory cat = roleCategoryRepo.findByRoleCategoryId(categoryId);
-				if(cat != null) {
-					for(Roles r : cat.getRoles()) {
-						roleRepository.delete(r);
-					}
-					
-					roleCategoryRepo.delete(cat);
-				}
-			};
-		
-			return "fragments/ok";
-		
-	}
 
 }

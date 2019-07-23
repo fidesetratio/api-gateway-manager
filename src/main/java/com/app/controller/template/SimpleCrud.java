@@ -4,15 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
+import com.app.controller.ClientController;
 import com.app.controller.SingleTemplateController;
+import com.app.controller.datatables.models.PaginationCriteria;
+import com.app.controller.datatables.models.TablePage;
+import com.app.rest.model.ClientDetails;
+import com.app.rest.model.EntityResponse;
 
 public abstract class SimpleCrud extends SingleTemplateController {
 	
-
+	private static Logger logger = LoggerFactory.getLogger(SimpleCrud.class);
+	
 	public abstract  DataTablesWidget init();
+	public abstract  TablePage listsPage(PaginationCriteria treq);
 	
 	
 	public String index(HttpServletRequest request, Model model) {
@@ -27,6 +47,23 @@ public abstract class SimpleCrud extends SingleTemplateController {
 		model.addAttribute("providercontent","fragments/"+target);
 		return data;
 	}
+	
+	
+	
+	
+	@RequestMapping(value="/lists",method=RequestMethod.POST,produces="application/json")
+	public @ResponseBody TablePage lists(@RequestBody PaginationCriteria treq) {
+		return listsPage(treq);
+	}
+	
+
+	
+	
+	@RequestMapping(value="/add",method=RequestMethod.GET)
+	public String add(Model model){
+			return "";
+	}
+	
 
 	
 	

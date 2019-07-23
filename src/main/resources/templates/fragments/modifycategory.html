@@ -3,7 +3,7 @@
  
  
 	<div class="row">
-				<form method="POST"   th:object="${roleCategory}" th:action="@{'/category/add/submit'}">
+				<form method="POST"   th:object="${roleCategory}" th:action="@{'/category/modify/submit'}">
 			
 					<div id="home" class="col-sm-12 tab-pane fade in active">
 						<div class="row">
@@ -23,6 +23,9 @@
 							 
 						</div>	
 					</div>
+					
+					<input type="hidden" id="categoryId" th:field="*{roleCategoryId}" />
+                
 					
 					</div>
 				</form> 

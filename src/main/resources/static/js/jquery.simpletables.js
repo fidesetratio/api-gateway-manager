@@ -80,7 +80,7 @@
         	    
         	}
            
-        	var showForm = function(ket,url,data = []){
+        	var showForm = function(table,ket,url,data = []){
         		
         		var title = "Add Form";
         		if (ket == 0){
@@ -105,6 +105,7 @@
 			      				    data: data
 			      				   
 			      				}).done(function (response){
+			      					table.ajax.reload();
 			      					self.setContent(response);
 			        			}).fail(function(xhr, textStatus, errorThrown){
 			        				self.setContent(textStatus);
@@ -146,6 +147,8 @@
     					            	    	currentContent.setContent(ct);
     					            	    }else{
     					            	    	alertmessage("success yo").prependTo(parent);
+    					      					table.ajax.reload();
+
     					            	    	currentContent.close();
     					            	    }
 					            	    }
@@ -211,7 +214,7 @@
         		        	 {
         		                 text: 'Add',                
         		                 action: function ( e, dt, node, config ) {
-        		                	 showForm(0,urladd);
+        		                	 showForm(table,0,urladd);
         		                 }
         		             },
         		             {
@@ -228,8 +231,7 @@
         		                		    });
         		                	 }else{
         		                			var selectedData = JSON.stringify(modify.data().toArray()[0]);
-        		                		 
-        		                		 showForm(1,urlmodify,selectedData);
+        		                		 	showForm(table,1,urlmodify,selectedData);
         		                		 
         		                		 
         		                		 
@@ -263,7 +265,6 @@
         		                      				    data: data,
         		                      				    processData: false,
         		                      				    success: function( data, textStatus, jQxhr) {
-        		                      				    		alert(JSON.stringify(data));
         		                      				    		if(data.response==0){
         		                      				    			deleteRemove.remove().draw(false);	
         		                      				    		}
