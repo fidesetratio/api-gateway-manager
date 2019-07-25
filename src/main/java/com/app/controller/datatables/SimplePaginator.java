@@ -6,17 +6,10 @@ import com.app.controller.datatables.models.PaginationCriteria;
 import com.app.controller.datatables.models.TablePage;
 //https://github.com/davioooh/datatables-pagination/blob/2.x/datatables-pagination-example/src/main/java/com/davioooh/paginationdemo/UserTableRepository.java
 public class SimplePaginator implements TablePaginator {
-
-	
-	
 	private TableDataService dataService;
-
     public SimplePaginator(TableDataService dataService) {
         this.dataService = dataService;
     }
-    
-    
-    
 	@Override
 	public TablePage getPage(PaginationCriteria paginationCriteria) {
 		   TablePage page = new TablePage();

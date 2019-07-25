@@ -1,5 +1,5 @@
 
-<form id="addprovider" class="form-horizontal" th:object="${clientDetail}"  th:action="@{'/provider/submit'}">
+<form id="addprovider" class="form-horizontal" th:object="${authenticationProvider}"  th:action="@{'/authentication/add/submit'}">
 
 <div th:if="${msg != null}" class="alert alert-success alert-dismissible" >
 	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

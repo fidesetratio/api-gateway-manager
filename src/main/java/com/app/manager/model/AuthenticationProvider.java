@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.app.manager.converter.BooleanStringConverter;
@@ -25,10 +26,11 @@ public class AuthenticationProvider {
 	@Column(name="provider_name", nullable=true, length=255)
 	private String providerName;
 	
+	@NotEmpty(message="Please enter your url")
 	@Column(name="url", nullable=true, length=255)
 	private String url;
 	
-	
+
 	@Column(name="type_provider", nullable=true, length=255)
 	private String typeProvider;
 	

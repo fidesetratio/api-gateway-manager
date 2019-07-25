@@ -3,7 +3,7 @@
  
  
 	<div class="row">
-				<form method="POST"  th:object="${authenticationProvider}" th:action="@{'/authentication/add/submit'}">
+				<form method="POST"  th:object="${authenticationProvider}" th:action="@{'/authentication/modify/submit'}">
 			
 					<div id="home" class="col-sm-12 tab-pane fade in active">
 						<div class="row">
@@ -49,7 +49,8 @@
 							</div>
 						</div>	
 					</div>
-					
+					<input type="hidden" id="providerId" th:field="*{providerId}" />
+                
 					</div>
 				</form> 
 </div>
