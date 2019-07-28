@@ -1,15 +1,24 @@
 package com.app.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.controller.datatables.SimplePaginator;
 import com.app.controller.datatables.TablePaginator;
@@ -20,9 +29,11 @@ import com.app.controller.template.SimpleCrud;
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.Link;
 import com.app.manager.model.RoleCategory;
+import com.app.manager.model.Roles;
 import com.app.manager.repo.AuthenticationProviderRepository;
 import com.app.manager.repo.LinkRepository;
 import com.app.manager.repo.RolesCategoriesRepository;
+import com.app.rest.model.EntityResponse;
 import com.app.services.LinkServices;
 
 @Controller
@@ -79,4 +90,92 @@ public class LinksController extends SimpleCrud {
 		model.addAttribute("links",links);
 		return "fragments/addlinks";
 	}
+
+	@RequestMapping(value="/remove",method=RequestMethod.POST,produces="application/json")
+	public @ResponseBody EntityResponse remove(@RequestBody  List<Link> list) {
+		logger.info("size:"+list.size());
+		for(Link details:list){
+			Link clientDetails = details;
+			repo.deleteById(clientDetails.getLinkId());
+		}
+		EntityResponse response = new EntityResponse();
+		return response;
+		
+		
+		
+	}
+
+
+	
+	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
+	public String submit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText,@RequestParam(name = "sensitiveHeaders") String sensitiveHeaders) {
+		
+	
+		if(link !=  null) {
+			if(!roleText.trim().equals("")) {
+				List<String> roles = new ArrayList<String>(Arrays.asList(roleText.split(";")));
+				link.setRoles(roles);
+			};
+			if(!sensitiveHeaders.trim().equals("")) {
+				List<String> senheaders = new ArrayList<String>(Arrays.asList(sensitiveHeaders.split(";")));
+				link.setSensitiveHeaders(senheaders);
+			}
+		};
+		
+		
+		if(link.getCategoryId()>0) {
+			RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+			List<String> rt = new ArrayList<String>();
+			for(Roles r:category.getRoles()) {
+				rt.add(r.getRoleName());
+			}
+			if(rt.size()>0) {
+				link.setRoles(rt);
+			}
+			
+		}
+		
+		if (bindingResult.hasErrors()) {
+			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+			model.addAttribute("listCategories",listCategories);		
+			model.addAttribute("listProviders",listAuthenticationProvider);		
+			model.addAttribute("link",link);
+			return "fragments/addlinks";
+		}
+		linkRepository.save(link);
+		return "fragments/ok";
+	}
+	
+	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
+            MediaType.APPLICATION_XHTML_XML_VALUE })
+	public String modify(@RequestBody Link l,Model model){
+			///logger.info("modify"+detail.getClientId());
+		
+		List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+		List<Link> links = new ArrayList<Link>();
+		links = (List<Link>)linkRepository.findAll();
+		
+			
+		   Link link = repo.findByLinkId(l.getLinkId());
+		  
+		   
+		   String roles =  String.join(";", link.getRoles());
+		   String sensitiveheaders = String.join(";", link.getSensitiveHeaders());
+		   
+		   
+		   
+			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+			model.addAttribute("listCategories",listCategories);		
+			model.addAttribute("listProviders",listAuthenticationProvider);		
+			model.addAttribute("link",link);
+			model.addAttribute("links",links);
+			model.addAttribute("roleText",roles);
+			model.addAttribute("sensitiveHeaders",sensitiveheaders);
+			
+		   return "fragments/modifylinks";
+	}
+	
+
 }
+

@@ -75,10 +75,10 @@ public class CategoryServiceTable extends DataServiceBase<RoleCategory> {
 				
 				if(column == 0) {
 					if(dir.equals("asc")) {
-						pageable =  PageRequest.of(p, length, Sort.by("clientId").ascending());
+						pageable =  PageRequest.of(p, length, Sort.by("roleCategoryId").ascending());
 
 					}else {
-						pageable =  PageRequest.of(p, length, Sort.by("clientId").descending());
+						pageable =  PageRequest.of(p, length, Sort.by("roleCategoryId").descending());
 					}
 				};
 				

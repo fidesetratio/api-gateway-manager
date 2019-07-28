@@ -7,9 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 
 import com.app.controller.datatables.SimplePaginator;
 import com.app.controller.datatables.TablePaginator;
@@ -29,7 +26,6 @@ import com.app.controller.template.DataTablesWidget;
 import com.app.controller.template.SimpleCrud;
 import com.app.manager.model.RoleCategory;
 import com.app.manager.repo.RolesCategoriesRepository;
-import com.app.rest.model.ClientDetails;
 import com.app.rest.model.EntityResponse;
 import com.app.services.CategoryServiceTable;
 
@@ -99,6 +95,23 @@ public class CategoryController  extends SimpleCrud{
 		
 	}
 
+	
+	
+	
+	
+	
+	@RequestMapping(value="/listttest",method=RequestMethod.GET,produces="application/json")
+	public @ResponseBody EntityResponse listttest() {
+		
+		EntityResponse response = new EntityResponse();
+		List<RoleCategory> l = (List<RoleCategory>) repo.findAll();
+		
+		response.setMessage("total:"+l.size());
+		return response;
+		
+		
+		
+	}
 	
 	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_XHTML_XML_VALUE })
