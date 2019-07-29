@@ -31,8 +31,11 @@
 						    <div class="row">
 							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('active')} ? 'has-warning' : ''">
 								<label>Active</label>
-								<input type="text" placeholder="Enter Active." class="form-control" th:field="*{active}" >
-								 <span th:if="${#fields.hasErrors('active')}" class="help-block" th:errors="*{active}"></span>
+								 <select class="form-control" th:field="*{active}">
+		   	  <option th:value="true" data-th-field="*{active}" th:selected="${active==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{active}" th:selected="${active==false}">false</option>
+			</select>
+	
 							</div>
 							
 							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('permitAll')} ? 'has-warning' : ''">
@@ -53,7 +56,7 @@
 						    <div class="row">
 							<div class="col-sm-6 form-group">
 								<label>Role Pickup?</label>
-								 <select class="form-control" id="rolePickup">
+								 <select name="rolePickup" class="form-control" id="rolePickup">
 		   	  <option th:value="1">From Role Group Category</option>
 		   	  <option th:value="2">Without Role Group Category</option>
 			</select>

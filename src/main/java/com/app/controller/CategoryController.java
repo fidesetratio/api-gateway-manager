@@ -23,6 +23,7 @@ import com.app.controller.datatables.TablePaginator;
 import com.app.controller.datatables.models.PaginationCriteria;
 import com.app.controller.datatables.models.TablePage;
 import com.app.controller.template.DataTablesWidget;
+import com.app.controller.template.FormInput;
 import com.app.controller.template.SimpleCrud;
 import com.app.manager.model.RoleCategory;
 import com.app.manager.repo.RolesCategoriesRepository;
@@ -47,6 +48,17 @@ public class CategoryController  extends SimpleCrud{
 		widget.addHeader("Role CategoryId");
 		widget.addHeader("Category Name");
 		widget.addHeader("Category Description");
+		/*FormInput formInput = new FormInput("Category","categoryId",FormInput.SELECT);
+		formInput.addSelect("Amerika", "0");
+		formInput.addSelect("Indonesia", "1");
+		widget.addFormInput(formInput);
+		widget.addFormInput(new FormInput("Context","context",FormInput.INPUT));
+		widget.addFormInput(formInput);
+		
+		FormInput inputText = new FormInput("Search By Name", "name");
+		widget.addFormInput(inputText);
+		*/
+	
 		return widget;
 	}
 
@@ -105,7 +117,6 @@ public class CategoryController  extends SimpleCrud{
 		
 		EntityResponse response = new EntityResponse();
 		List<RoleCategory> l = (List<RoleCategory>) repo.findAll();
-		
 		response.setMessage("total:"+l.size());
 		return response;
 		

@@ -12,12 +12,46 @@ public class DataTablesWidget {
 	private List<String> headers;
 	
 	private boolean buttons;
+	
+	
+	
+
+
+
+
+	public void setUseFormSearch(boolean useFormSearch) {
+		this.useFormSearch = useFormSearch;
+	}
+
+	
+	public boolean isUseFormSearch() {
+		return useFormSearch;
+	}
+	
+	
+	
+	private boolean useFormSearch;
+	
+	private List<FormInput> searchForm;
 
 	
 	
 	public DataTablesWidget() {
 		this.headers = new ArrayList<String>();
+		this.useFormSearch = false;
+		this.searchForm = new ArrayList<FormInput>();
 	}
+	
+	
+	public void addFormInput(FormInput input){
+		if(this.searchForm != null){
+			this.searchForm.add(input);
+			this.useFormSearch = true;
+		}
+	}
+	
+	
+	
 	
 	
 	
@@ -74,6 +108,16 @@ public class DataTablesWidget {
 
 	public void setButtons(boolean buttons) {
 		this.buttons = buttons;
+	}
+
+
+	public List<FormInput> getSearchForm() {
+		return searchForm;
+	}
+
+
+	public void setSearchForm(List<FormInput> searchForm) {
+		this.searchForm = searchForm;
 	}
 	
 	

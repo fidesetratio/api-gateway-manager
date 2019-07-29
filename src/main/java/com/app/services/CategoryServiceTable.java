@@ -31,6 +31,7 @@ public class CategoryServiceTable extends DataServiceBase<RoleCategory> {
 		Pageable pageable = PageRequest.of(0, 10);
 		page = this.repo.findAll(pageable);
 		
+		
 	}
 	@Override
 	public long countTotalEntries() throws TableDataException {
@@ -64,6 +65,10 @@ public class CategoryServiceTable extends DataServiceBase<RoleCategory> {
 		System.out.println("p:"+p);
 	
 		Pageable pageable = PageRequest.of(p, length);
+		List<String> complex = paginationCriteria.getSearchcomplex();
+		for(String s:complex){
+			System.out.println("complex:"+s);
+		}
 		
 		if(order.size()>0) {
 			for(OrderingCriteria criteria : order) {

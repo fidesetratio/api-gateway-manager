@@ -25,18 +25,21 @@
     		var content = $(this);
         	var columns = [];
         	var url = $(this).attr("table-url");
-
+        	var complexSearch = $(this).attr("complex-search");
+        	var domv = 'Bfrtip';
+        	if(complexSearch == "true"){
+        		domv = 'Blrtp';
+        	}
         	var buttonFlag = "false";
         	
         	if($(this).attr("button")){
         		buttonFlag = $(this).attr("button");
         	}
-        	
-        	
         	var urllist = url+"/lists";
         	var urladd = url+"/add";
         	var urlremove = url+"/remove";
         	var urlmodify = url+"/modify";
+        	
         	content.find(".pick").prop('checked',false);
         
         	
@@ -202,6 +205,20 @@
         		            "type": "POST",
         		            "contentType" : "application/json; charset=utf-8",			    
         		            "data": function ( d ) {
+        		            	
+        		            	
+        		            	d.searchcomplex = [];
+
+        		            	if(complexSearch == "true"){
+        		            		$("#formsearch input,#formsearch select").each(function(index){
+        		            			var input = $(this);
+        		            			d.searchcomplex[index] = input.val();
+        		            		});
+        		            	}
+        		            	
+        		            
+        		            	
+        		            	
         		                return JSON.stringify(d); // NOTE: you also need to stringify POST payload
         		            }
         		        },       			
@@ -209,7 +226,8 @@
         		            header: true,
         		            footer: true
         		        },
-        		        dom: 'Bfrtip',
+        		       dom: domv,
+        		   
         		        buttons: [
         		        	 {
         		                 text: 'Add',                
@@ -293,6 +311,27 @@
         		    
         	);
         	
+        	
+        	if(complexSearch == "true"){
+        		$("#formsearch").click(function(e){
+        			table.draw(false);
+        		});
+
+        		$("#formclear").click(function(e){
+        			$("#formsearch input").val('');
+        			e.stopPropagation();
+        			
+        		});
+        		
+        		$("#formsearch input,#formsearch select").each(function(index){
+        			var input = $(this);
+        			input.click(function(e){
+        				e.stopPropagation();
+        			});
+        		});
+        	}
+            	
+        		
         	if(buttonFlag=="false"){   
         		table.buttons().remove();
         	};
@@ -300,7 +339,7 @@
         	table.buttons(1).disable();
         	table.buttons(2).disable();
 
-       
+        		
         
         	
         	 table

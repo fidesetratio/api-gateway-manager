@@ -108,7 +108,7 @@ public class LinksController extends SimpleCrud {
 
 	
 	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
-	public String submit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText,@RequestParam(name = "sensitiveHeaders") String sensitiveHeaders) {
+	public String submit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText,@RequestParam(name = "sensitiveHeaders") String sensitiveHeaders,@RequestParam(name = "rolePickup") Integer rolePickup) {
 		
 	
 		if(link !=  null) {
@@ -122,16 +122,21 @@ public class LinksController extends SimpleCrud {
 			}
 		};
 		
-		
-		if(link.getCategoryId()>0) {
-			RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
-			List<String> rt = new ArrayList<String>();
-			for(Roles r:category.getRoles()) {
-				rt.add(r.getRoleName());
-			}
-			if(rt.size()>0) {
-				link.setRoles(rt);
-			}
+		if(rolePickup<=1){		
+					if(link.getCategoryId()>0) {
+			
+						RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+						List<String> rt = new ArrayList<String>();
+						for(Roles r:category.getRoles()) {
+							rt.add(r.getRoleName());
+						}
+						if(rt.size()>0) {
+							link.setRoles(rt);
+						}
+						
+					}
+		}else{
+			link.setCategoryId(new Long(0));
 			
 		}
 		
@@ -158,9 +163,13 @@ public class LinksController extends SimpleCrud {
 		
 			
 		   Link link = repo.findByLinkId(l.getLinkId());
-		  
-		   
-		   String roles =  String.join(";", link.getRoles());
+		   Integer rolePickup = 2;
+		   if(link.getCategoryId()>0){
+			   rolePickup = 1;
+		   }
+		   String roles = "";
+		   if(link.getRoles().size()>0)
+		   roles =  String.join(";", link.getRoles());
 		   String sensitiveheaders = String.join(";", link.getSensitiveHeaders());
 		   
 		   
@@ -171,10 +180,60 @@ public class LinksController extends SimpleCrud {
 			model.addAttribute("link",link);
 			model.addAttribute("links",links);
 			model.addAttribute("roleText",roles);
+			model.addAttribute("rolePickup",rolePickup);
 			model.addAttribute("sensitiveHeaders",sensitiveheaders);
 			
 		   return "fragments/modifylinks";
 	}
+	
+	
+	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
+	public String modifysubmit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model,@RequestParam(name = "roleText") String roleText,@RequestParam(name = "sensitiveHeaders") String sensitiveHeaders,@RequestParam(name = "rolePickup") Integer rolePickup) {
+			
+		if(link !=  null) {
+			if(!roleText.trim().equals("")) {
+				List<String> roles = new ArrayList<String>(Arrays.asList(roleText.split(";")));
+				link.setRoles(roles);
+			};
+			if(!sensitiveHeaders.trim().equals("")) {
+				List<String> senheaders = new ArrayList<String>(Arrays.asList(sensitiveHeaders.split(";")));
+				link.setSensitiveHeaders(senheaders);
+			}
+		};
+		
+		
+
+		if(rolePickup<=1){		
+			if(link.getCategoryId()>0) {
+	
+				RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+				List<String> rt = new ArrayList<String>();
+				for(Roles r:category.getRoles()) {
+					rt.add(r.getRoleName());
+				}
+				if(rt.size()>0) {
+					link.setRoles(rt);
+				}
+				
+			}
+			}else{
+				link.setCategoryId(new Long(0));
+				
+				
+			}
+		
+		if (bindingResult.hasErrors()) {
+			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+			model.addAttribute("listCategories",listCategories);		
+			model.addAttribute("listProviders",listAuthenticationProvider);		
+			model.addAttribute("link",link);
+			return "fragments/modifylinks";
+		}
+		linkRepository.save(link);
+		return "fragments/ok";
+	}
+	
 	
 
 }

@@ -44,6 +44,29 @@ public abstract class SimpleCrud extends SingleTemplateController {
 		model.addAttribute("headers", headers);
 		model.addAttribute("table_url",widget.getDestination());
 		model.addAttribute("button","true");
+		model.addAttribute("useFormSearch",widget.isUseFormSearch());
+		model.addAttribute("formSearch01",new ArrayList<FormInput>());
+		model.addAttribute("formSearch02",new ArrayList<FormInput>());
+		model.addAttribute("formSearch03",new ArrayList<FormInput>());
+		
+		if(widget.getSearchForm().size()>0 && widget.getSearchForm().size()<3){
+			int max = widget.getSearchForm().size();
+			model.addAttribute("formSearch01", widget.getSearchForm().subList(0, max));
+		};
+
+		if(widget.getSearchForm().size()>=3 && widget.getSearchForm().size()<=5){
+			int max = widget.getSearchForm().size();
+			model.addAttribute("formSearch01", widget.getSearchForm().subList(0, 3));
+			model.addAttribute("formSearch02", widget.getSearchForm().subList(3,max));
+		};
+		if(widget.getSearchForm().size()>5 && widget.getSearchForm().size()<=10){
+			int max = widget.getSearchForm().size();
+			model.addAttribute("formSearch01", widget.getSearchForm().subList(0, 3));
+			model.addAttribute("formSearch02", widget.getSearchForm().subList(3,6));
+			model.addAttribute("formSearch03", widget.getSearchForm().subList(6,max));
+			
+		};
+		
 		model.addAttribute("providercontent","fragments/"+target);
 		return data;
 	}

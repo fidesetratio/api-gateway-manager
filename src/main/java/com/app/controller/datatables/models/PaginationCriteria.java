@@ -1,5 +1,6 @@
 package com.app.controller.datatables.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PaginationCriteria {
@@ -36,11 +37,18 @@ public class PaginationCriteria {
 	 * Column's ordering criteria.
 	 */
 	private List<OrderingCriteria> order;
+	
+	
+	private List<String> searchcomplex;
 
 	/**
 	 * Table column's list.
 	 */
 	private List<Column> columns;
+	
+	public PaginationCriteria(){
+		this.searchcomplex = new ArrayList<String>();
+	}
 
 	public int getDraw() {
 		return draw;
@@ -116,6 +124,14 @@ public class PaginationCriteria {
 		}
 		
 		return buffer.toString();
+	}
+
+	public List<String> getSearchcomplex() {
+		return searchcomplex;
+	}
+
+	public void setSearchcomplex(List<String> searchcomplex) {
+		this.searchcomplex = searchcomplex;
 	}
 	
 
