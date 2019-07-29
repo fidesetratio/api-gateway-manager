@@ -1,0 +1,119 @@
+	<div class="col-lg-12 well">
+	<div class="row">
+				<form method="POST"  th:object="${link}" th:action="@{'/links/add/submit'}">
+					<div id="home" class="col-sm-12 tab-pane fade in active">
+						<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('serviceId')} ? 'has-warning' : ''">
+								<label>Service ID</label>
+								<input type="text" placeholder="Enter Service Id ." class="form-control" th:field="*{serviceId}" >
+								 <span th:if="${#fields.hasErrors('serviceId')}" class="help-block" th:errors="*{serviceId}"></span>
+							</div>
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('context')} ? 'has-warning' : ''">
+								<label>Context</label>
+								<input type="text" placeholder="Enter Context." class="form-control" th:field="*{context}">
+								<span th:if="${#fields.hasErrors('context')}" class="help-block" th:errors="*{context}"></span>
+							</div>
+						</div>	
+					    <div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('path')} ? 'has-warning' : ''">
+								<label>Path</label>
+								<input type="text" placeholder="Enter Path." class="form-control" th:field="*{path}" >
+								 <span th:if="${#fields.hasErrors('path')}" class="help-block" th:errors="*{path}"></span>
+							</div>
+							
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('url')} ? 'has-warning' : ''">
+								<label>Url</label>
+								<input type="text" placeholder="Enter Url." class="form-control" th:field="*{url}">
+								<span th:if="${#fields.hasErrors('url')}" class="help-block" th:errors="*{url}"></span>
+							</div>
+						</div>
+						
+						    <div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('active')} ? 'has-warning' : ''">
+								<label>Active</label>
+								 <select class="form-control" th:field="*{active}">
+		   	  <option th:value="true" data-th-field="*{active}" th:selected="${active==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{active}" th:selected="${active==false}">false</option>
+			</select>
+	
+							</div>
+							
+							<div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('permitAll')} ? 'has-warning' : ''">
+									
+								<label for="active">Permit All</label>
+		     <select class="form-control" th:field="*{permitAll}">
+		   	  <option th:value="true" data-th-field="*{permitAll}" th:selected="${permitAll==true}">true</option>
+		   	  <option th:value="false" data-th-field="*{permitAll}" th:selected="${permitAll==false}">false</option>
+			</select>
+			
+			
+			
+							</div>
+						</div>
+						
+						
+						
+						    <div class="row">
+							<div class="col-sm-6 form-group">
+								<label>Role Pickup?</label>
+								 <select name="rolePickup" class="form-control" id="rolePickup">
+		   	  <option th:value="1" th:selected="${rolePickup==1}">From Role Group Category</option>
+		   	  <option th:value="2"  th:selected="${rolePickup==2}">Without Role Group Category</option>
+			</select>
+							</div>
+							
+							<div class="col-sm-6 form-group">
+								<label>Role Category</label>
+								<select class="form-control" th:field="*{categoryId}">
+		     
+		     						<option value="0" th:selected="${categoryId==0}">Select Available Group</option>
+		   			                <option th:each="lg : ${listCategories}"
+                        th:value="${lg.roleCategoryId}" th:text="${lg.categoryName}" th:selected="${lg.roleCategoryId==categoryId}">fGroup
+							</option>
+							</select>
+							</div>
+						</div>
+						
+						
+						<div class="row">
+							<div class="col-sm-6 form-group">
+								<label>Role Text (ex: ROLE_ADMIN;ROLE_USER )</label>
+								 <input type="text" class="form-control" id="roleText" name="roleText"  th:value="${roleText}">
+							</div>
+							
+							<div class="col-sm-6 form-group">
+								<label>Authentication Provider</label>
+								 <select class="form-control" id="authenticationProvider" th:field="*{providerId}">
+			 						<option value="0" th:selected="${providerId==0}">Select Available Provider</option>
+		   			                <option th:each="lp : ${listProviders}"
+								th:value="${lp.providerId}" th:text="${lp.providerName}" th:selected="${lp.providerId==providerId}">providerId
+								</option> 
+			
+								</select>
+							</div>
+						</div>
+						
+						
+									
+						<div class="row">
+							<div class="col-sm-6 form-group">
+								<label>Strip Prefix</label>
+								 <select class="form-control" th:field="*{stripPrefix}">
+							<option th:value="true" data-th-field="*{stripPrefix}" th:selected="${stripPrefix==true}">true</option>
+								<option th:value="false" data-th-field="*{stripPrefix}" th:selected="${stripPrefix==false}">false</option>
+							</select>
+							</div>
+							
+							<div class="col-sm-6 form-group">
+								<label>Sensitive Headers (ex: Cookie;Set-Cookie )</label>
+								 <input type="text" class="form-control" id="sensitiveHeaders" name="sensitiveHeaders" th:value="${sensitiveHeaders}" >
+							</div>
+						</div>
+						
+						<input type="hidden" id="linkId" th:field="*{linkId}" />
+					</div>
+						
+				</form>
+	</div>
+	
+	</div>
