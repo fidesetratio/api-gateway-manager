@@ -3,6 +3,8 @@ package com.app.controller.datatables.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.app.controller.template.SelectValue;
+
 public class PaginationCriteria {
 	
 	/**
@@ -39,7 +41,13 @@ public class PaginationCriteria {
 	private List<OrderingCriteria> order;
 	
 	
-	private List<String> searchcomplex;
+	private List<SearchEntity> searchcomplex;
+	
+	
+
+
+	private SelectValue selectcategory;
+
 
 	/**
 	 * Table column's list.
@@ -47,7 +55,7 @@ public class PaginationCriteria {
 	private List<Column> columns;
 	
 	public PaginationCriteria(){
-		this.searchcomplex = new ArrayList<String>();
+		this.searchcomplex = new ArrayList<SearchEntity>();
 	}
 
 	public int getDraw() {
@@ -126,12 +134,19 @@ public class PaginationCriteria {
 		return buffer.toString();
 	}
 
-	public List<String> getSearchcomplex() {
+	public List<SearchEntity> getSearchcomplex() {
 		return searchcomplex;
 	}
 
-	public void setSearchcomplex(List<String> searchcomplex) {
+	public void setSearchcomplex(List<SearchEntity> searchcomplex) {
 		this.searchcomplex = searchcomplex;
+	}
+	public void setSelectcategory(SelectValue selectcategory) {
+		this.selectcategory = selectcategory;
+	}
+
+	public SelectValue getSelectcategory() {
+		return selectcategory;
 	}
 	
 

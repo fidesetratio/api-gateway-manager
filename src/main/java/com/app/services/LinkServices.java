@@ -58,6 +58,7 @@ public class LinkServices  extends DataServiceBase<Link>{
 			
 			System.out.println("draw:"+draw);
 			System.out.println("length:"+length);
+			System.out.println("searchbycategoryId"+paginationCriteria.getSelectcategory());
 
 			System.out.println("start:"+start);
 			String searchvalue = null;

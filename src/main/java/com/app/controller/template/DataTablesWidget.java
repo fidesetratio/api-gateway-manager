@@ -15,38 +15,62 @@ public class DataTablesWidget {
 	
 	
 	
+	public static Integer DEFAULT_FORM = 0;
+	public static Integer CUSTOM_SEARCH = 1;
+	public static Integer SIMPLE_BY_CATEGORY = 2;
+	
+	
+	
 
 
 
 
-	public void setUseFormSearch(boolean useFormSearch) {
-		this.useFormSearch = useFormSearch;
+	
+	public int getTypeForm() {
+		return typeForm;
 	}
 
-	
-	public boolean isUseFormSearch() {
-		return useFormSearch;
+
+	public void setTypeForm(int typeForm) {
+		this.typeForm = typeForm;
 	}
-	
-	
-	
-	private boolean useFormSearch;
+
+
+	private int typeForm;
 	
 	private List<FormInput> searchForm;
+	
+	private SelectInput selectInput;
+	
+	public boolean useButton;
+	
+
 
 	
 	
+	public SelectInput getSelectInput() {
+		return selectInput;
+	}
+
+
+	public void setSelectInput(SelectInput selectInput) {
+		this.selectInput = selectInput;
+		this.typeForm = SIMPLE_BY_CATEGORY;
+	}
+
+
 	public DataTablesWidget() {
 		this.headers = new ArrayList<String>();
-		this.useFormSearch = false;
+		this.typeForm = DEFAULT_FORM;
 		this.searchForm = new ArrayList<FormInput>();
+		this.useButton = true;
 	}
 	
 	
 	public void addFormInput(FormInput input){
 		if(this.searchForm != null){
 			this.searchForm.add(input);
-			this.useFormSearch = true;
+			this.typeForm = CUSTOM_SEARCH;
 		}
 	}
 	
@@ -68,6 +92,8 @@ public class DataTablesWidget {
 		this.destination = destination;
 		this.headers = headers;
 		this.buttons = buttons;
+		this.typeForm = DEFAULT_FORM;
+		this.useButton = true;
 	}
 
 	
@@ -118,6 +144,16 @@ public class DataTablesWidget {
 
 	public void setSearchForm(List<FormInput> searchForm) {
 		this.searchForm = searchForm;
+	}
+
+
+	public boolean isUseButton() {
+		return useButton;
+	}
+
+
+	public void setUseButton(boolean useButton) {
+		this.useButton = useButton;
 	}
 	
 	

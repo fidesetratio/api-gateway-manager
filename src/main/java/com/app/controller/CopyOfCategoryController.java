@@ -30,14 +30,13 @@ import com.app.manager.repo.RolesCategoriesRepository;
 import com.app.rest.model.EntityResponse;
 import com.app.services.CategoryServiceTable;
 
-@Controller
-@RequestMapping("/category")
-public class CategoryController  extends SimpleCrud{
 
-	@Autowired
+public class CopyOfCategoryController {
+
+/*	@Autowired
 	private RolesCategoriesRepository repo;
 	
-	private Logger logger = LoggerFactory.getLogger(CategoryController.class);
+	private Logger logger = LoggerFactory.getLogger(CopyOfCategoryController.class);
 
 	@Override
 	public DataTablesWidget init() {
@@ -48,16 +47,17 @@ public class CategoryController  extends SimpleCrud{
 		widget.addHeader("Role CategoryId");
 		widget.addHeader("Category Name");
 		widget.addHeader("Category Description");
-	/*	FormInput formInput = new FormInput("Category","categoryId",FormInput.SELECT);
+		FormInput formInput = new FormInput("Category","categoryId",FormInput.SELECT);
 		formInput.addSelect("Amerika", "0");
 		formInput.addSelect("Indonesia", "1");
 		widget.addFormInput(formInput);
 		widget.addFormInput(new FormInput("Context","context",FormInput.INPUT));
 		widget.addFormInput(formInput);
+		
 		FormInput inputText = new FormInput("Search By Name", "name");
 		widget.addFormInput(inputText);
 	
-*/		return widget;
+		return widget;
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class CategoryController  extends SimpleCrud{
 		repo.save(roleCategory);
 		return "fragments/ok";
 	}
-	
+	*/
 
 	
 

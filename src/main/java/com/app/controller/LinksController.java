@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.app.controller.datatables.SimplePaginator;
 import com.app.controller.datatables.TablePaginator;
 import com.app.controller.datatables.models.PaginationCriteria;
+import com.app.controller.datatables.models.ReceiveData;
 import com.app.controller.datatables.models.TablePage;
 import com.app.controller.template.DataTablesWidget;
+import com.app.controller.template.SelectInput;
 import com.app.controller.template.SimpleCrud;
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.Link;
@@ -67,7 +70,14 @@ public class LinksController extends SimpleCrud {
 		widget.addHeader("ServiceId");
 		widget.addHeader("PermitAll");
 		widget.addHeader("Active");
-		return widget;
+		/*SelectInput selectInput = new SelectInput("Category","categoryid");
+		selectInput.addSelect("Please Select Category","0");
+		selectInput.addSelect("Database","1");
+		selectInput.addSelect("Rumah","2");
+		
+		
+		widget.setSelectInput(selectInput);
+*/		return widget;
 	}
 
 	@Override
@@ -78,7 +88,10 @@ public class LinksController extends SimpleCrud {
 	}
 
 	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String add(Model model){
+	public String add(Model model,@RequestParam(name="categoryid",required = false) Integer categoryid){
+		
+		System.out.println("categoryIDD="+categoryid);
+		
 		List<Link> links = new ArrayList<Link>();
 		links = (List<Link>)linkRepository.findAll();
 		List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
@@ -154,14 +167,11 @@ public class LinksController extends SimpleCrud {
 	
 	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_XHTML_XML_VALUE })
-	public String modify(@RequestBody Link l,Model model){
-			///logger.info("modify"+detail.getClientId());
-		
+	public String modify(@RequestBody Link l,@RequestParam(name="categoryid",required=false) String categoryId,Model model){
+	
 		List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 		List<Link> links = new ArrayList<Link>();
 		links = (List<Link>)linkRepository.findAll();
-		
-			
 		   Link link = repo.findByLinkId(l.getLinkId());
 		   Integer rolePickup = 2;
 		   if(link.getCategoryId()>0){

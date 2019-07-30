@@ -6,6 +6,12 @@ public class SelectValue {
 	
 	private String value;
 	
+	public SelectValue(){
+		this.label = null;
+		this.value = null;
+	}
+	
+	
 	public SelectValue(String label,String value){
 		this.label = label;
 		this.value = value;
@@ -25,6 +31,12 @@ public class SelectValue {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+
+	@Override
+	public String toString() {
+		return "SelectValue [label=" + label + ", value=" + value + "]";
 	}
 
 }

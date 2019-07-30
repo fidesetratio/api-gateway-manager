@@ -25,9 +25,9 @@
     		var content = $(this);
         	var columns = [];
         	var url = $(this).attr("table-url");
-        	var complexSearch = $(this).attr("complex-search");
+        	var typeForm = $(this).attr("typeForm");
         	var domv = 'Bfrtip';
-        	if(complexSearch == "true"){
+        	if(typeForm == 1){
         		domv = 'Blrtp';
         	}
         	var buttonFlag = "false";
@@ -95,25 +95,33 @@
         		var content ='url:'+url;
         		if(ket == 0){
         			content ='url:'+url;
+        			if(typeForm == 2){
+        				var input=$("#categorychange");
+	            		content = 'url:'+url+"?"+input.attr("name")+"="+input.val();
+	            	};
+	            	
+	            	
         		}else if(ket == 1){
-        		
+        			if(typeForm==2){
+        				var input=$("#categorychange");
+        				url = 	url+"?"+input.attr("name")+"="+input.val();
+        			};
+        			
+        			
         			
         			content	= function(){
         				var self = this;
-        			
-			        	return 	$.ajax({
+        				return 	$.ajax({
 			        			    url: url,
 			        			    method: 'POST',
 			      				    contentType: 'application/json',
-			      				    data: data
-			      				   
+			      				    data: data			      				   
 			      				}).done(function (response){
 			      					table.ajax.reload();
 			      					self.setContent(response);
 			        			}).fail(function(xhr, textStatus, errorThrown){
 			        				self.setContent(textStatus);
-			        	        });
-        				
+			        	        });        				
         			};
       			
         		}
@@ -205,15 +213,15 @@
         		            "type": "POST",
         		            "contentType" : "application/json; charset=utf-8",			    
         		            "data": function ( d ) {
-        		            	
-        		            	
         		            	d.searchcomplex = [];
-
-        		            	if(complexSearch == "true"){
+        		            	if(typeForm == 1){
         		            		$("#formsearch input,#formsearch select").each(function(index){
         		            			var input = $(this);
-        		            			d.searchcomplex[index] = input.val();
+        		            			d.searchcomplex.push({label:input.attr("name"),value:input.val()});
         		            		});
+        		            	}else if(typeForm == 2){
+        		            			var input=$("#categorychange");
+        		            			d.selectcategory =  {label:input.attr("name"),value:input.val()};
         		            	}
         		            	
         		            
@@ -312,7 +320,7 @@
         	);
         	
         	
-        	if(complexSearch == "true"){
+        	if(typeForm == 1){
         		$("#formsearch").click(function(e){
         			table.draw(false);
         		});
@@ -322,12 +330,16 @@
         			e.stopPropagation();
         			
         		});
-        		
         		$("#formsearch input,#formsearch select").each(function(index){
         			var input = $(this);
         			input.click(function(e){
         				e.stopPropagation();
         			});
+        		});
+        	}else if(typeForm==2){
+        		$("#categorychange").change(function(e){
+        			table.draw(false);
+        			e.stopPropagation();
         		});
         	}
             	

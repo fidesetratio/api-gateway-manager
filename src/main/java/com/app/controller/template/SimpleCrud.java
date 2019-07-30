@@ -43,8 +43,9 @@ public abstract class SimpleCrud extends SingleTemplateController {
 		List<String> headers = widget.getHeaders();	
 		model.addAttribute("headers", headers);
 		model.addAttribute("table_url",widget.getDestination());
-		model.addAttribute("button","true");
-		model.addAttribute("useFormSearch",widget.isUseFormSearch());
+		model.addAttribute("button",widget.isUseButton());
+		model.addAttribute("typeForm",widget.getTypeForm());
+		model.addAttribute("selectInput",widget.getSelectInput());
 		model.addAttribute("formSearch01",new ArrayList<FormInput>());
 		model.addAttribute("formSearch02",new ArrayList<FormInput>());
 		model.addAttribute("formSearch03",new ArrayList<FormInput>());
@@ -81,11 +82,11 @@ public abstract class SimpleCrud extends SingleTemplateController {
 	
 
 	
-	
+/*	
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public String add(Model model){
 			return "";
-	}
+	}*/
 	
 
 	
