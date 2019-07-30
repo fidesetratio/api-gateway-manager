@@ -3,6 +3,7 @@ package com.app.services.specification;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -35,7 +36,7 @@ public class RolesSpecification implements Specification<Roles> {
 		switch (criteria.getOperation()) {
 		case EQUALITY:
 			if(roleCategory != null){
-				Join rootJoin = root.join("roleCategory");
+				Join  rootJoin = root.join("roleCategory");
 				return builder.equal(rootJoin.get(criteria.getKey()), criteria.getValue());
 			};
 			return builder.equal(root.get(criteria.getKey()), criteria.getValue());

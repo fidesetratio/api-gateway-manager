@@ -112,13 +112,11 @@ public class RoleServiceTable  extends DataServiceBase<Roles> {
 		
 		SelectValue select = paginationCriteria.getSelectcategory();
 		if(Integer.parseInt(select.getValue())>0){
-			RolesSpecification categoryId = new RolesSpecification(new SpecSearchCriteria("roleCategoryId", SearchOperation.EQUALITY, new Long(14)),new RoleCategory());
+			RolesSpecification categoryId = new RolesSpecification(new SpecSearchCriteria("roleCategoryId", SearchOperation.EQUALITY, Long.parseLong(select.getValue())),new RoleCategory());
 			page = this.repo.findAll(Specification.where(categoryId),pageable);
 		}else{
 			page = this.repo.findAll(pageable);
 		};
-		
-		 
 		if(search != null) {
 			searchvalue = search.getValue();
 			if(searchvalue !=  null && !searchvalue.trim().equals("")) {
@@ -126,7 +124,7 @@ public class RoleServiceTable  extends DataServiceBase<Roles> {
 				RolesSpecification roleName = new RolesSpecification(new SpecSearchCriteria("roleName", SearchOperation.CONTAINS, searchvalue));
 		
 				if(Integer.parseInt(select.getValue())>0){
-					RolesSpecification categoryId = new RolesSpecification(new SpecSearchCriteria("roleCategory.roleCategoryId", SearchOperation.EQUALITY, select.getValue()));
+					RolesSpecification categoryId = new RolesSpecification(new SpecSearchCriteria("roleCategoryId", SearchOperation.EQUALITY, select.getValue()),new RoleCategory());
 					page = this.repo.findAll(Specification.where(roleName).and(categoryId),pageable);
 				}else{
 					page = this.repo.findAll(Specification.where(roleName),pageable);

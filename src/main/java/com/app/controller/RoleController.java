@@ -34,9 +34,9 @@ public class RoleController  extends SimpleCrud {
 		DataTablesWidget widget = new DataTablesWidget();
 		widget.setTitle("Role");
 		widget.setDestination("/role");
-		widget.addHeader("Role Id");
-		widget.addHeader("Role Id");
-		widget.addHeader("Role Name");
+		widget.addHeader("roleId");
+		widget.addHeader("roleId");
+		widget.addHeader("roleName");
 		SelectInput selectInput = new SelectInput("Role Category","categoryid");
 		selectInput.addSelect("Please Select Category","0");
 		

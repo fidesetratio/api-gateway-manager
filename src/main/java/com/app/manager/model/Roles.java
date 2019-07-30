@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="roles")
 public class Roles {
@@ -20,7 +22,7 @@ public class Roles {
 	@Column(name="roleId")
 	private Long roleId;
 	
-	
+	@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
     private RoleCategory roleCategory;
