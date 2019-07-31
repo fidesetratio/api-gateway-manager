@@ -154,6 +154,8 @@
 					            	    data: form.serialize(),
 					            	    success: function(response) {
 					            	    	var ct = $(response);
+					            	    	
+								            	
 					            	        if (ct.find('.has-warning').length) {
     					            	    	currentContent.setContent(ct);
     					            	    }else{
