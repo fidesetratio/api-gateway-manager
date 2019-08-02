@@ -123,7 +123,6 @@ public class LinkServices  extends DataServiceBase<Link>{
 					if(column == 5) {
 						if(dir.equals("asc")) {
 							pageable =  PageRequest.of(p, length, Sort.by("active").ascending());
-
 						}else {
 							pageable =  PageRequest.of(p, length, Sort.by("active").descending());
 						}
@@ -141,7 +140,7 @@ public class LinkServices  extends DataServiceBase<Link>{
 					System.out.println("search value="+searchvalue);
 					RoleCategorySpecification clientIdSpecification = new RoleCategorySpecification(new SpecSearchCriteria("context", SearchOperation.CONTAINS, searchvalue));
 					RoleCategorySpecification resourceIdSpecification = new RoleCategorySpecification(new SpecSearchCriteria("serviceId", SearchOperation.CONTAINS, searchvalue));
-					RoleCategorySpecification permitAll = new RoleCategorySpecification(new SpecSearchCriteria("permitAll", SearchOperation.CONTAINS, searchvalue));
+					RoleCategorySpecification permitAll = new RoleCategorySpecification(new SpecSearchCriteria("serviceId", SearchOperation.CONTAINS, searchvalue));
 					page = this.repo.findAll(Specification.where(clientIdSpecification).or(resourceIdSpecification).or(permitAll),pageable);
 				}
 				

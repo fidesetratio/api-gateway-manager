@@ -25,9 +25,7 @@ public class SimplePaginator implements TablePaginator {
         page.setDraw(paginationCriteria.getDraw());
         page.setRecordsTotal(dataService.countTotalEntries());
         page.setRecordsFiltered(dataService.countFilteredEntries(paginationCriteria));
-
         page.setData(dataService.getPageEntries(paginationCriteria));
-
         return page;
 }
 }
