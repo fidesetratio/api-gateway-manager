@@ -1,0 +1,114 @@
+	<div class="col-lg-12 well">
+			
+ 
+ 
+	<div class="row">
+				<form method="POST"   th:object="${application}" th:action="@{'/application/addForm/submit'}">
+				
+				
+					<div class="col-sm-4 tab-pane fade in active">
+						<label>Logo</label>
+					
+						<img src="https://statik.tempo.co/data/2019/05/09/id_840655/840655_720.jpg"/>
+						<div class="form-group">
+ 
+<label>Upload File</label>
+ 
+<input type="file" id="BSbtndanger">
+<input type="hidden" id="photo" th:field="*{photo}"/>
+</div>
+ 
+
+					</div>
+			
+					<div  class="col-sm-8 tab-pane fade in active">
+						<div class="row">
+							<div class="col-sm-12 form-group"  th:classappend="${#fields.hasErrors('applicationName')} ? 'has-warning' : ''">
+								<label>Application Name</label>
+								<input type="text" placeholder="Enter Application Name " class="form-control" th:field="*{applicationName}" >
+								 <span th:if="${#fields.hasErrors('applicationName')}" class="help-block" th:errors="*{applicationName}"></span>
+							</div>
+							
+						</div>
+						<div class="row">
+									
+						<div class="col-sm-12 form-group" th:classappend="${#fields.hasErrors('description')} ? 'has-warning' : ''">
+							<label>Description</label>
+							<textarea placeholder="Enter Description.." th:field="*{description}" rows="3" class="form-control"></textarea>
+							 <span th:if="${#fields.hasErrors('description')}" class="help-block" th:errors="*{description}"></span>
+							 
+						</div>	
+					</div>
+					
+						<div class="row">
+									
+						<div class="col-sm-12 form-group" th:classappend="${#fields.hasErrors('context')} ? 'has-warning' : ''">
+							<label>Context</label>
+							<input type="text" placeholder="Enter Context.. " class="form-control" th:field="*{context}" >
+							 <span th:if="${#fields.hasErrors('context')}" class="help-block" th:errors="*{context}"></span>
+							 
+						</div>	
+						
+						
+					
+					
+							
+					</div>
+					
+						<div class="row">
+									
+						<div class="col-sm-12 form-group" >
+							<label>Select Available Provider</label>
+						
+			
+			 <select class="form-control" id="authenticationProvider" th:field="*{providerId}">
+			 						<option value="0" th:selected="${providerId==0}">Select Available Provider</option>
+		   			                <option th:each="lp : ${listProviders}"
+								th:value="${lp.providerId}" th:text="${lp.providerName}" th:selected="${lp.providerId==providerId}">providerId
+								</option> 
+			
+								</select>
+	
+							 
+						</div>	
+					</div>	
+					
+						<div class="row">
+									
+						<div class="col-sm-12 form-group" >
+							<label for="active">Permit All</label>
+						
+		   	 				  
+			 <select class="form-control" th:field="*{permitAll}">
+		   	  <option th:value="1" data-th-field="*{permitAll}" th:selected="${permitAll==1}">true</option>
+		   	  <option th:value="0" data-th-field="*{permitAll}" th:selected="${permitAll==0}">false</option>
+			</select>
+			
+	
+							 
+						</div>	
+					</div>
+					
+						
+						<div class="row">
+									
+						<div class="col-sm-12 form-group">
+							<label for="active">Role Category</label>
+							<select class="form-control" th:field="*{roleCategoryId}">
+						     <option value="0" th:selected="${roleCategoryId==0}">Select Available Group</option>
+		     						
+		   			                <option th:each="lg : ${listCategories}"
+                        th:value="${lg.roleCategoryId}" th:text="${lg.categoryName}" th:selected="${lg.roleCategoryId==roleCategoryId}">fGroup
+							</option>
+							</select>
+						
+	
+							 
+						</div>	
+					</div>
+				</form> 
+				
+	</div>
+</div>
+
+
