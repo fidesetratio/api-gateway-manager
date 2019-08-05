@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -88,4 +89,10 @@ public class ApplicationController extends SingleTemplateController{
 		return page;
 	}
 	
+	@RequestMapping(value="/remove",method=RequestMethod.GET)
+	public String  remove(@RequestParam(name="removeId",required = false) Long removeId) {
+		Optional<Application> app = applicationRepo.findById(removeId);
+		applicationRepo.delete(app.get());
+		return "fragments/ok";
+	}
 }
