@@ -65,7 +65,6 @@ public class ApplicationController extends SingleTemplateController{
 	public String addFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
 			System.out.println("patar submit");			
 			if (bindingResult.hasErrors()) {
-				
 				for(ObjectError er:bindingResult.getAllErrors()) {
 					System.out.println("error:"+er.getDefaultMessage());
 				}
@@ -74,7 +73,6 @@ public class ApplicationController extends SingleTemplateController{
 				model.addAttribute("listProviders",listAuthenticationProvider);		
 				List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
 				model.addAttribute("listCategories",listCategories);
-				
 				return "fragments/addapplication";
 			}
 			
