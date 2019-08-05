@@ -46,7 +46,7 @@ public class Application {
 	private int providerId;
 	
 	public Application(){
-		this.photo = "notavailable.png";
+		this.photo = "imagenotavailable.png";
 		this.permitAll = 0;
 		this.providerId = 0;
 		this.roleCategoryId =0;

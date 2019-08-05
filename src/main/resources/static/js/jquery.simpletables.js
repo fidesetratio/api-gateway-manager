@@ -142,7 +142,7 @@
          			        useBootstrap: false,
          			        buttons: {
          			            submit:function(){
-         			             var self = this;
+         			            	var self = this;
 					            	 var content = this.$content;
 					            	 var form = content.find("form");
 					            	 var action= form.attr("action");

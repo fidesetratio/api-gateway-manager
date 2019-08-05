@@ -24,6 +24,7 @@
        	var url = mainUrl+"/"+"addForm";
        	var list = mainUrl+"/"+"lists";
        	var remove = mainUrl+"/"+"remove";
+       	var uploadFileUrl = mainUrl+"/"+"uploadFile";
        	var reload = function(search){
        		container.find("#container").empty();
        	 $.ajax({
@@ -40,7 +41,7 @@
        	    		html = html+'<p><strong>About: </strong>'+value.description+'</p>';
        	    		html = html+'</div>';
        	    		html = html+'<div class="right col-xs-5 text-center">';
-       	    		html = html+'<img src="'+value.photos+'" alt="" class="img-responsive">';
+       	    		html = html+'<img src="/images/'+value.photos+'" alt="" class="img-responsive">';
        	    		html = html+'</div>';
        	    		html = html+'</div>';
        	    		html = html+'<div class="col-xs-12 bottom ">';
@@ -64,16 +65,48 @@
       	    		html = html+'</div>';  	   
       	    		var div = $(html);
       	    		var d = container.find("#container").append(div);
+      	    		
+      	    		
+      	    		
       	    		div.find(".removethem").click(function(){
       	    			
       	    			var id = $(this).attr("attr");
-      	    			 $.ajax({
-      	    	       		url: remove+"?removeId="+id,
-      	    	       	    type: 'get',
-      	    	       	    success: function(response) {
-      	    	       	    	reload("");
-      	    	       	    }
-      	    			 });
+      	    			
+      	    			
+      	    			
+      	    			
+      	    			$.confirm({
+	                        title: 'Are you want to delete this Item?',
+	                        content: 'Are you want to delete this Item?.',
+	                        type: 'red',
+	                        typeAnimated: true,
+	                        buttons: {
+	                            tryAgain: {
+	                                text: 'Ok',
+	                                btnClass: 'btn-red',
+	                                action: function(){
+	                                	var data = id;
+	                                	 $.ajax({
+	                   	    	       		url: remove+"?removeId="+data,
+	                   	    	       	    type: 'get',
+	                   	    	       	    success: function(response) {
+	                   	    	       	    	reload("");
+	                   	    	       	    }
+	                   	    			 });
+	                                	
+	                                	
+	                                	
+	                                }
+	                            },
+	                            close: function () {
+	                            }
+	                        }
+	                    });
+      	    			
+      	    			
+      	    			
+      	    			
+      	    			
       	    		});
       	    		
       	    		
@@ -100,6 +133,32 @@
   			        	     	 var content = this.$content;
 				            	 var form = content.find("form");
 				            	 form.find("input:first").focus();
+				            	 var uploadFile = content.find("#upload-file-input");
+				            	
+				            	// var formUpload = $(uploadFile).appendTo(form);
+				            	 uploadFile.on("change", function(){
+				            		 	var data;
+					            	    data = new FormData();
+					           		    data.append( 'file', uploadFile[0].files[0]);
+					            	    $.ajax({
+					            	        url: uploadFileUrl,
+					            	        type: "POST",
+					            	        data: data,
+					            	        enctype: 'multipart/form-data',
+					            	        processData: false,
+					            	        contentType: false,
+					            	        cache: false,
+					            	        success: function () {
+					            	         	content.find("#viewer").prop("src","/media/"+uploadFile[0].files[0].name);
+					            	        	
+					            	        },
+					            	        error: function () {
+					            	          // Handle upload error
+					            	          // ...
+					            	        }
+					            	      });
+				            	 });
+				            	 
   			        	
   			        }, 
   			        boxWidth: '80%',
@@ -111,6 +170,8 @@
 			            	 var form = content.find("form");
 			            	 var action= form.attr("action");
 			            	 var currentContent = this;
+			            	
+			            	 
 			            	
 			            	 $.ajax({
 			            		url: action,
