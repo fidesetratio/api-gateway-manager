@@ -25,7 +25,6 @@ public class Application {
 	private String applicationName;
 	
 	
-	@Size(min=1, max=32, message="Description must be between 1 and 32 characters")
 	@Column(name="description", nullable=true, length=255)
 	private String description;
 	

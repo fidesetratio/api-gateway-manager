@@ -94,10 +94,41 @@ public class ApplicationController extends SingleTemplateController{
 	};
 	
 	
+	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
+	public String modifyFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
+			System.out.println("patar submit");			
+			if (bindingResult.hasErrors()) {
+				for(ObjectError er:bindingResult.getAllErrors()) {
+					System.out.println("error:"+er.getDefaultMessage());
+				}
+				model.addAttribute("application", application);
+				List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+				model.addAttribute("listProviders",listAuthenticationProvider);		
+				List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+				model.addAttribute("listCategories",listCategories);
+				return "fragments/modifyapplication";
+			}
+			applicationRepo.save(application);
+
+			return "fragments/ok";
+	};
+	
+	
+	
 	@RequestMapping(value="/lists",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody List<Application> lists(@RequestParam(name="search",required = false) String search) {
 		List<Application> page = (List<Application>) applicationRepo.findAll();
 		return page;
+	}
+	
+	
+
+	@RequestMapping(value="/modifyapplication",method=RequestMethod.GET)
+	public String modifyApplication(Model model,@RequestParam(name="id",required = false) Long id){
+		
+		Application application = applicationRepo.findByAppId(id);
+		model.addAttribute("application", application);
+		return "fragments/modifyapplication";
 	}
 	
 	@RequestMapping(value="/remove",method=RequestMethod.GET)
@@ -112,14 +143,11 @@ public class ApplicationController extends SingleTemplateController{
 	@ResponseBody
 	public ResponseEntity<?> uploadFile(
 	    @RequestParam("file") MultipartFile uploadfile) {
-		System.out.println("ada ngak nih");
-	  
 	  try {
 	    // Get the filename and build the local file path (be sure that the 
 	    // application have write permissions on such directory)
 	    String filename = uploadfile.getOriginalFilename();
-	    String directory = "/var/netgloo_blog/uploads";
-	    directory = env.getProperty("folder.images");
+	    String directory =  env.getProperty("folder.images");
 	    String filepath = Paths.get(directory, filename).toString();
 	    
 	    // Save the file locally

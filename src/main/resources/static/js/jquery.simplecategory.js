@@ -25,6 +25,7 @@
        	var list = mainUrl+"/"+"lists";
        	var remove = mainUrl+"/"+"remove";
        	var uploadFileUrl = mainUrl+"/"+"uploadFile";
+    	var modifyApplication = mainUrl+"/"+"modifyapplication";
        	var reload = function(search){
        		container.find("#container").empty();
        	 $.ajax({
@@ -41,12 +42,12 @@
        	    		html = html+'<p><strong>About: </strong>'+value.description+'</p>';
        	    		html = html+'</div>';
        	    		html = html+'<div class="right col-xs-5 text-center">';
-       	    		html = html+'<img src="/images/'+value.photos+'" alt="" class="img-responsive">';
+       	    		html = html+'<img src="/media/'+value.photo+'" alt="" class="img-responsive">';
        	    		html = html+'</div>';
        	    		html = html+'</div>';
        	    		html = html+'<div class="col-xs-12 bottom ">';
        	    		html = html+'<div class="col-xs-12 col-sm-3 emphasis">';
-       	    		html = html+'<button type="button" class="btn btn-primary btn-xs">';
+       	    		html = html+'<button type="button" class="modifythem btn btn-primary btn-xs"  attr="'+value.appId+'">';
        	    		html = html+'<i class="fa fa-user"> </i> Modify';
        	    		html = html+'</button>';
        	    		html = html+'</div>';
@@ -66,7 +67,89 @@
       	    		var div = $(html);
       	    		var d = container.find("#container").append(div);
       	    		
+      	    		div.find(".modifythem").click(function(){
+      	    			var id = $(this).attr("attr");
+      	    	
+      	    			$.confirm({
+      	        			 title: 'Modify',
+      	        			 type: 'blue',
+      	        			 content: 'url:'+modifyApplication+"?id="+id,
+      	        			 onContentReady: function () {
+      	  			        	     	 var content = this.$content;
+      					            	 var form = content.find("form");
+      					            	 	content.find("#viewer").prop("src","/media/"+content.find("#photo").val());
+						            	        
+      					            	 form.find("input:first").focus();
+      					            	 var uploadFile = content.find("#upload-file-input");
+      					            	// var formUpload = $(uploadFile).appendTo(form);
+      					            	 uploadFile.on("change", function(){
+      					            		 	var data;
+      						            	    data = new FormData();
+      						           		    data.append( 'file', uploadFile[0].files[0]);
+      						            	    $.ajax({
+      						            	        url: uploadFileUrl,
+      						            	        type: "POST",
+      						            	        data: data,
+      						            	        enctype: 'multipart/form-data',
+      						            	        processData: false,
+      						            	        contentType: false,
+      						            	        cache: false,
+      						            	        success: function () {
+      						            	         	content.find("#viewer").prop("src","/media/"+uploadFile[0].files[0].name);
+      						            	         	content.find("#photo").val(uploadFile[0].files[0].name);
+      						            	         },
+      						            	        error: function () {
+      						            	          // Handle upload error
+      						            	          // ...
+      						            	        }
+      						            	      });
+      					            	 });
+      					            	 
+      	  			        	
+      	  			        }, 
+      	  			        boxWidth: '80%',
+      	  			        useBootstrap: false,
+      	  			        buttons: {
+      	  			        	submit:function(){
+      	  			        		var self = this;
+      				            	 var content = this.$content;
+      				            	 var form = content.find("form");
+      				            	 var action= form.attr("action");
+      				            	 var currentContent = this;
+      				            	 $.ajax({
+      				            		url: action,
+      				            	    type: 'post',
+      				            	    data: form.serialize(),
+      				            	    success: function(response) {
+      				            	    	var ct = $(response);
+      				            	    	if (ct.find('.has-warning').length) {
+      					            	    	currentContent.setContent(ct);
+      					            	    }else{
+      					            	    	 currentContent.close();
+      					            	    	 reload("");
+      					            	    }
+      				            	    }
+      				            	
+      				            	});
+      				            	 
+      	  			        		return false;
+      	  			        		
+      	  			        	},
+      	 			        	close:{
+      				            		keys:['esc'],
+      	 			            		action : function(){
+      	 			            			 
+      	 			            		}
+      	  			        	
+      	  			        }
+      	  			        }
+      	        		 });
+      	        		 
+      	        		 e.stopPropagation();
+      	        	 });
       	    		
+      	    		
+      	    
       	    		
       	    		div.find(".removethem").click(function(){
       	    			
@@ -124,7 +207,7 @@
         	
         	 var t = $(this);
         	 t.find("#add").click(function(e){
-
+        		 
         		 $.confirm({
         			 title: 'Add',
         			 type: 'blue',
@@ -132,9 +215,9 @@
         			 onContentReady: function () {
   			        	     	 var content = this.$content;
 				            	 var form = content.find("form");
+				            		content.find("#photo").val('imagenotavailable.png');
 				            	 form.find("input:first").focus();
 				            	 var uploadFile = content.find("#upload-file-input");
-				            	
 				            	// var formUpload = $(uploadFile).appendTo(form);
 				            	 uploadFile.on("change", function(){
 				            		 	var data;
@@ -150,8 +233,8 @@
 					            	        cache: false,
 					            	        success: function () {
 					            	         	content.find("#viewer").prop("src","/media/"+uploadFile[0].files[0].name);
-					            	        	
-					            	        },
+					            	         	content.find("#photo").val(uploadFile[0].files[0].name);
+					            	         },
 					            	        error: function () {
 					            	          // Handle upload error
 					            	          // ...
@@ -170,9 +253,6 @@
 			            	 var form = content.find("form");
 			            	 var action= form.attr("action");
 			            	 var currentContent = this;
-			            	
-			            	 
-			            	
 			            	 $.ajax({
 			            		url: action,
 			            	    type: 'post',
@@ -182,8 +262,7 @@
 			            	    	if (ct.find('.has-warning').length) {
 				            	    	currentContent.setContent(ct);
 				            	    }else{
-				            	    	
-				            	    	currentContent.close();
+				            	    	 currentContent.close();
 				            	    	 reload("");
 				            	    }
 			            	    }

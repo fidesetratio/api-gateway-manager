@@ -3,7 +3,7 @@
  
  
 	<div class="row">
-				<form method="POST"   th:object="${application}" th:action="@{'/application/addForm/submit'}">
+				<form method="POST"   th:object="${application}" th:action="@{'/application/modify/submit'}">
 				
 				
 					<div class="col-sm-4 tab-pane fade in active">
@@ -101,10 +101,10 @@
                         th:value="${lg.roleCategoryId}" th:text="${lg.categoryName}" th:selected="${lg.roleCategoryId==roleCategoryId}">fGroup
 							</option>
 							</select>
-						
-	
-							 
 						</div>	
+							
+					<input type="hidden" id="appId" th:field="*{appId}" />
+                
 					</div>
 				</form> 
 				
