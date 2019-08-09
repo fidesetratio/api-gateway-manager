@@ -64,6 +64,10 @@ public class Link {
 	@Column(name="categoryId")
 	private Long categoryId;
 	
+	
+	@Column(name="appId")
+	private Long appId;
+	
 
 	@Column(name="providerId")
 	private Long providerId;
@@ -228,5 +232,15 @@ public class Link {
 
 	public void setSensitiveHeaders(List<String> sensitiveHeaders) {
 		this.sensitiveHeaders = sensitiveHeaders;
+	}
+
+
+	public Long getAppId() {
+		return appId;
+	}
+
+
+	public void setAppId(Long appId) {
+		this.appId = appId;
 	}
 }

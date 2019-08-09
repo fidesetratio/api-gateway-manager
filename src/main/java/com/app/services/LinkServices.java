@@ -23,14 +23,21 @@ public class LinkServices  extends DataServiceBase<Link>{
 	
 	private LinkRepository repo;
 	private Page<Link> page;
-	
+	private Long appId = (long) 0;
 	
 	public LinkServices(LinkRepository repo){
 			this.repo = repo;
+			
+			
 			Pageable pageable = PageRequest.of(0, 10);
 			page = this.repo.findAll(pageable);
 	}
-
+	public LinkServices(LinkRepository repo,Long appId){
+		this.repo = repo;
+		this.appId = appId;
+		Pageable pageable = PageRequest.of(0, 10);
+		page = this.repo.findByAppId(appId, pageable);
+}
 	@Override
 	public long countTotalEntries() throws TableDataException {
 		// TODO Auto-generated method stub
@@ -131,8 +138,12 @@ public class LinkServices  extends DataServiceBase<Link>{
 				}
 			}
 			
+			if(this.appId>0){
+				page = this.repo.findByAppId(this.appId,pageable);
+			
+			}else{
 			page = this.repo.findAll(pageable);
-			 
+			};
 			 
 			if(search != null) {
 				searchvalue = search.getValue();
@@ -141,7 +152,13 @@ public class LinkServices  extends DataServiceBase<Link>{
 					RoleCategorySpecification clientIdSpecification = new RoleCategorySpecification(new SpecSearchCriteria("context", SearchOperation.CONTAINS, searchvalue));
 					RoleCategorySpecification resourceIdSpecification = new RoleCategorySpecification(new SpecSearchCriteria("serviceId", SearchOperation.CONTAINS, searchvalue));
 					RoleCategorySpecification permitAll = new RoleCategorySpecification(new SpecSearchCriteria("serviceId", SearchOperation.CONTAINS, searchvalue));
-					page = this.repo.findAll(Specification.where(clientIdSpecification).or(resourceIdSpecification).or(permitAll),pageable);
+					if(this.appId>0){
+						RoleCategorySpecification appId = new RoleCategorySpecification(new SpecSearchCriteria("appId", SearchOperation.EQUALITY, Long.toString(this.appId)));
+						page = this.repo.findAll(Specification.where(clientIdSpecification).and(appId).or(resourceIdSpecification).or(permitAll),pageable);	
+					}else{
+						page = this.repo.findAll(Specification.where(clientIdSpecification).or(resourceIdSpecification).or(permitAll),pageable);	
+					}
+					
 				}
 				
 			}

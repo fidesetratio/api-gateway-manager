@@ -22,9 +22,11 @@
         	
         var mainUrl = $(this).attr("application-url");
        	var url = mainUrl+"/"+"addForm";
-       	var list = mainUrl+"/"+"lists";
+       	var list = mainUrl+"/"+"listsdata";
        	var remove = mainUrl+"/"+"remove";
        	var uploadFileUrl = mainUrl+"/"+"uploadFile";
+
+       	var addLink = mainUrl+"/index/"+"addLink";
     	var modifyApplication = mainUrl+"/"+"modifyapplication";
        	var reload = function(search){
        		container.find("#container").empty();
@@ -57,8 +59,8 @@
       	    		html = html+'</button>';
       	    		html = html+'</div>';
       	    		html = html+'<div class="col-xs-12 col-sm-3 emphasis">';
-      	    		html = html+'<button type="button" class="btn btn-primary btn-xs">';
-      	    		html = html+'<i class="fa fa-user"> </i> Add Links';
+      	    		html = html+'<button type="button" class="addlink btn btn-primary btn-xs" attr="'+value.appId+'">';
+      	    		html = html+'<i class="fa fa-user"> </i>  Add Links';
       	    		html = html+'</button>';
       	    		html = html+'</div>';
       	    		html = html+'</div>';
@@ -67,7 +69,14 @@
       	    		var div = $(html);
       	    		var d = container.find("#container").append(div);
       	    		
-      	    		div.find(".modifythem").click(function(){
+      	    		div.find(".addlink").click(function(e){
+      	    			var id = $(this).attr("attr");
+      	    			location.href =addLink+"?categoryId="+id;
+      	    			e.stopPropagation();
+      	    			
+      	    		});
+      	    		
+      	    		div.find(".modifythem").click(function(e){
       	    			var id = $(this).attr("attr");
       	    	
       	    			$.confirm({
@@ -150,6 +159,8 @@
       	    		
       	    		
       	    
+      	    		
+      	    		
       	    		
       	    		div.find(".removethem").click(function(){
       	    			

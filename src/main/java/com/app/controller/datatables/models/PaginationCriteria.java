@@ -47,6 +47,8 @@ public class PaginationCriteria {
 
 
 	private SelectValue selectcategory;
+	
+	private SelectValue hiddenCategory;
 
 
 	/**
@@ -147,6 +149,14 @@ public class PaginationCriteria {
 
 	public SelectValue getSelectcategory() {
 		return selectcategory;
+	}
+
+	public SelectValue getHiddenCategory() {
+		return hiddenCategory;
+	}
+
+	public void setHiddenCategory(SelectValue hiddenCategory) {
+		this.hiddenCategory = hiddenCategory;
 	}
 	
 

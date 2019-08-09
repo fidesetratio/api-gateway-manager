@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,18 +20,27 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.controller.datatables.SimplePaginator;
+import com.app.controller.datatables.TablePaginator;
+import com.app.controller.datatables.models.PaginationCriteria;
+import com.app.controller.datatables.models.TablePage;
+import com.app.controller.template.DataTablesWidget;
+import com.app.controller.template.FormInput;
 import com.app.manager.model.Application;
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.RoleCategory;
 import com.app.manager.repo.ApplicationRepository;
 import com.app.manager.repo.AuthenticationProviderRepository;
+import com.app.manager.repo.LinkRepository;
 import com.app.manager.repo.RolesCategoriesRepository;
+import com.app.services.LinkServices;
 
 
 @Controller
@@ -44,6 +54,8 @@ public class ApplicationController extends SingleTemplateController{
 	@Autowired
 	private Environment env;
 	
+	@Autowired
+	private LinkRepository repo;
 	
 	@Autowired
 	private RolesCategoriesRepository roleCategories;
@@ -115,7 +127,7 @@ public class ApplicationController extends SingleTemplateController{
 	
 	
 	
-	@RequestMapping(value="/lists",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(value="/listsdata",method=RequestMethod.GET,produces="application/json")
 	public @ResponseBody List<Application> lists(@RequestParam(name="search",required = false) String search) {
 		List<Application> page = (List<Application>) applicationRepo.findAll();
 		return page;
@@ -138,6 +150,61 @@ public class ApplicationController extends SingleTemplateController{
 		return "fragments/ok";
 	}
 	
+	@RequestMapping(value="/index/addLink",method=RequestMethod.GET)
+	public String  addAppLink(@RequestParam(name="categoryId",required = false) Long categoryId,Model model,HttpServletRequest request) {
+	
+		Application application = applicationRepo.findByAppId(categoryId);
+		DataTablesWidget widget = new DataTablesWidget();
+		widget.setTitle("Links Lists");
+		widget.setDestination("/application");
+		widget.addHeader("LinkId");
+		widget.addHeader("Link Id");
+		widget.addHeader("Context");
+		widget.addHeader("ServiceId");
+		widget.addHeader("PermitAll");
+		widget.addHeader("Active");
+		widget.setHiddenCategory(Long.toString(categoryId));
+		
+			model.addAttribute("titleprovider", widget.getTitle());
+			List<String> headers = widget.getHeaders();	
+			model.addAttribute("headers", headers);
+			model.addAttribute("table_url",widget.getDestination());
+			model.addAttribute("button",widget.isUseButton());
+			model.addAttribute("typeForm",widget.getTypeForm());
+			model.addAttribute("selectInput",widget.getSelectInput());
+			model.addAttribute("formSearch01",new ArrayList<FormInput>());
+			model.addAttribute("formSearch02",new ArrayList<FormInput>());
+			model.addAttribute("formSearch03",new ArrayList<FormInput>());
+			model.addAttribute("hiddenCategory",widget.getHiddenCategory());
+			
+			if(widget.getSearchForm().size()>0 && widget.getSearchForm().size()<3){
+				int max = widget.getSearchForm().size();
+				model.addAttribute("formSearch01", widget.getSearchForm().subList(0, max));
+			};
+
+			if(widget.getSearchForm().size()>=3 && widget.getSearchForm().size()<=5){
+				int max = widget.getSearchForm().size();
+				model.addAttribute("formSearch01", widget.getSearchForm().subList(0, 3));
+				model.addAttribute("formSearch02", widget.getSearchForm().subList(3,max));
+			};
+			if(widget.getSearchForm().size()>5 && widget.getSearchForm().size()<=10){
+				int max = widget.getSearchForm().size();
+				model.addAttribute("formSearch01", widget.getSearchForm().subList(0, 3));
+				model.addAttribute("formSearch02", widget.getSearchForm().subList(3,6));
+				model.addAttribute("formSearch03", widget.getSearchForm().subList(6,max));
+				
+			};
+			model.addAttribute("providercontent","fragments/addAppLink");
+		 return "single-template";
+	}
+	
+	@RequestMapping(value="/lists",method=RequestMethod.POST,produces="application/json")
+	public @ResponseBody TablePage lists(@RequestBody PaginationCriteria treq) {
+		TablePaginator paginator = new SimplePaginator(new LinkServices(repo,Long.parseLong(treq.getHiddenCategory().getValue())));
+		TablePage tablePage =  paginator.getPage(treq);
+		return tablePage;
+	}
+
 	
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
 	@ResponseBody

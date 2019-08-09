@@ -10,6 +10,7 @@ public class DataTablesWidget {
 	private String destination;
 	
 	private List<String> headers;
+	private String hiddenCategory = "0";
 	
 	private boolean buttons;
 	
@@ -18,7 +19,7 @@ public class DataTablesWidget {
 	public static Integer DEFAULT_FORM = 0;
 	public static Integer CUSTOM_SEARCH = 1;
 	public static Integer SIMPLE_BY_CATEGORY = 2;
-	
+	public static Integer SIMPLE_BY_CATEGORY_HIDDEN = 3;
 	
 	
 
@@ -58,6 +59,10 @@ public class DataTablesWidget {
 		this.typeForm = SIMPLE_BY_CATEGORY;
 	}
 
+	public void setHiddenCategory(String categoryId){
+		this.hiddenCategory = categoryId;
+		this.typeForm = SIMPLE_BY_CATEGORY_HIDDEN;
+	}
 
 	public DataTablesWidget() {
 		this.headers = new ArrayList<String>();
@@ -154,6 +159,11 @@ public class DataTablesWidget {
 
 	public void setUseButton(boolean useButton) {
 		this.useButton = useButton;
+	}
+
+
+	public String getHiddenCategory() {
+		return hiddenCategory;
 	}
 	
 	

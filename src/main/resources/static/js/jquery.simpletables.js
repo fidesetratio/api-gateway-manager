@@ -98,7 +98,11 @@
         			if(typeForm == 2){
         				var input=$("#categorychange");
 	            		content = 'url:'+url+"?"+input.attr("name")+"="+input.val();
-	            	};
+	            	}
+        			if(typeForm == 3){
+        				var input=$("#hiddenCategory");
+	            		content = 'url:'+url+"?"+input.attr("name")+"="+input.val();
+        			}
 	            	
 	            	
         		}else if(ket == 1){
@@ -106,7 +110,10 @@
         				var input=$("#categorychange");
         				url = 	url+"?"+input.attr("name")+"="+input.val();
         			};
-        			
+        			if(typeForm == 3){
+        				var input=$("#hiddenCategory");
+	            		content = 'url:'+url+"?"+input.attr("name")+"="+input.val();
+        			}
         			
         			
         			content	= function(){
@@ -224,8 +231,11 @@
         		            	}else if(typeForm == 2){
         		            			var input=$("#categorychange");
         		            			d.selectcategory =  {label:input.attr("name"),value:input.val()};
-        		            	}
-        		            	
+        		            	}else if(typeForm == 3){
+        		            		
+        	        					var input=$("#hiddenCategory");
+        	        					d.hiddenCategory =  {label:input.attr("name"),value:input.val()};
+        	        			}
         		            
         		            	
         		            	
