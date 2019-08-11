@@ -33,7 +33,6 @@ public class Application {
 	@Column(name="context", nullable=true, length=255)
 	private String context;
 
-	@Size(min=1, max=32, message="Photo must be between 1 and 32 characters")
 	@Column(name="photo", nullable=true, length=255)
 	private String photo;
 	

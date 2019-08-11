@@ -151,7 +151,7 @@ public class LinksController extends SimpleCrud {
 		}else{
 			link.setCategoryId(new Long(0));
 			
-		}
+		};
 		
 		if (bindingResult.hasErrors()) {
 			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();

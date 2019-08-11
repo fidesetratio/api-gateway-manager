@@ -1,0 +1,43 @@
+	<div class="col-lg-12 well">
+			
+ 
+ 
+	<div class="row">
+				<form method="POST"   th:object="${link}" th:action="@{'/application/add/submit'}">
+			
+					<div id="home" class="col-sm-12 tab-pane fade in active">
+						<div class="row">
+							<div class="col-sm-6 form-group"  th:classappend="${#fields.hasErrors('path')} ? 'has-warning' : ''">
+								<label>Path</label>
+								<input type="text" placeholder="Enter Path." class="form-control" th:field="*{path}" >
+								 <span th:if="${#fields.hasErrors('path')}" class="help-block" th:errors="*{path}"></span>
+							</div>
+							
+													</div>
+							<div class="row">
+						   <div class="col-sm-6 form-group" th:classappend="${#fields.hasErrors('url')} ? 'has-warning' : ''">
+								<label>Url</label>
+								<input type="text" placeholder="Enter Url." class="form-control" th:field="*{url}">
+								<span th:if="${#fields.hasErrors('url')}" class="help-block" th:errors="*{url}"></span>
+							</div>
+						   </div>
+						   
+							<input type="hidden"  class="form-control" th:field="*{appId}" >
+							<input type="hidden"  class="form-control" th:field="*{providerId}" >
+							<input type="hidden"  class="form-control" th:field="*{stripPrefix}" >
+						<input type="hidden"  class="form-control" th:field="*{categoryId}" >
+							<input type="hidden"  class="form-control" th:field="*{permitAll}" >
+						<input type="hidden"  class="form-control" th:field="*{active}" >
+						<input type="hidden"  class="form-control" th:field="*{serviceId}" >
+						<input type="hidden"  class="form-control" th:field="*{context}" >
+						
+					</div>
+						
+				</form>
+					
+				
+				
+	</div>
+</div>
+
+

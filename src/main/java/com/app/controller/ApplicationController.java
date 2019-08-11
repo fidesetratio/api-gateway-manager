@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ import com.app.controller.template.DataTablesWidget;
 import com.app.controller.template.FormInput;
 import com.app.manager.model.Application;
 import com.app.manager.model.AuthenticationProvider;
+import com.app.manager.model.Link;
 import com.app.manager.model.RoleCategory;
 import com.app.manager.repo.ApplicationRepository;
 import com.app.manager.repo.AuthenticationProviderRepository;
@@ -63,6 +65,12 @@ public class ApplicationController extends SingleTemplateController{
 
 	@Autowired
 	private ApplicationRepository applicationRepo;
+	
+
+	@Autowired
+	private LinkRepository linkRepository;
+
+	
 	
 	public String index(HttpServletRequest request, Model model) {
 		String data= super.index(request, model);
@@ -104,6 +112,51 @@ public class ApplicationController extends SingleTemplateController{
 
 			return "fragments/ok";
 	};
+	
+	
+	@RequestMapping(value="/add",method=RequestMethod.GET)
+	public String add(Model model,@RequestParam(name="hiddenCategory",required = false) Long hiddenCategory){
+		System.out.println("category :"+hiddenCategory);
+			Link link = new Link();
+			link.setAppId(hiddenCategory);
+			link.setContext("/");
+			link.setServiceId("/hidden");
+			List<Link> links = new ArrayList<Link>();
+			links = (List<Link>)linkRepository.findAll();
+			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+		
+			
+			
+			model.addAttribute("link",link);
+			
+			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+			model.addAttribute("listCategories",listCategories);		
+			model.addAttribute("listProviders",listAuthenticationProvider);		
+			model.addAttribute("link",link);
+			model.addAttribute("links",links);
+			
+			
+			return "fragments/addLinkByApp";
+	}
+
+	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
+	public String submit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model) {
+		System.out.println("gagas");;
+		System.out.println("link problemaga:"+link);
+		
+		if (bindingResult.hasErrors()) {
+			
+			for(FieldError err:bindingResult.getFieldErrors()) {
+				System.out.println(err.getField()+"err="+err.getDefaultMessage());
+			}
+			System.out.println("link problem:"+link);
+			
+			return "fragments/addLinkByApp";
+		}
+		System.out.println("link success:"+link);
+		
+		return "fragments/ok";
+	}
 	
 	
 	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
@@ -165,7 +218,7 @@ public class ApplicationController extends SingleTemplateController{
 		widget.addHeader("Active");
 		widget.setHiddenCategory(Long.toString(categoryId));
 		
-			model.addAttribute("titleprovider", widget.getTitle());
+			model.addAttribute("titleprovider", widget.getTitle()+" >> "+application.getApplicationName());
 			List<String> headers = widget.getHeaders();	
 			model.addAttribute("headers", headers);
 			model.addAttribute("table_url",widget.getDestination());
