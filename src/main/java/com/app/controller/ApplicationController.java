@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -18,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +38,7 @@ import com.app.manager.model.Application;
 import com.app.manager.model.AuthenticationProvider;
 import com.app.manager.model.Link;
 import com.app.manager.model.RoleCategory;
+import com.app.manager.model.Roles;
 import com.app.manager.repo.ApplicationRepository;
 import com.app.manager.repo.AuthenticationProviderRepository;
 import com.app.manager.repo.LinkRepository;
@@ -106,7 +107,7 @@ public class ApplicationController extends SingleTemplateController{
 				List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
 				model.addAttribute("listCategories",listCategories);
 				return "fragments/addapplication";
-			}
+			};
 			
 			applicationRepo.save(application);
 
@@ -141,20 +142,45 @@ public class ApplicationController extends SingleTemplateController{
 
 	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
 	public String submit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model) {
-		System.out.println("gagas");;
-		System.out.println("link problemaga:"+link);
-		
 		if (bindingResult.hasErrors()) {
-			
-			for(FieldError err:bindingResult.getFieldErrors()) {
-				System.out.println(err.getField()+"err="+err.getDefaultMessage());
-			}
-			System.out.println("link problem:"+link);
-			
 			return "fragments/addLinkByApp";
 		}
-		System.out.println("link success:"+link);
 		
+		Application app = applicationRepo.findByAppId(link.getAppId());
+		
+		UUID uiid = UUID.randomUUID();
+		String uiidString = uiid.toString();
+		String context = app.getApplicationName()+"-"+uiidString;
+		link.setContext(context);
+		String serviceId = app.getApplicationName()+"-"+uiidString;
+		System.out.println("uuid:"+serviceId);
+		
+		link.setServiceId(serviceId);
+		link.setActive(true);
+		link.setPermitAll(app.getPermitAll()==1?true:false);
+		int providerId = app.getProviderId();
+		link.setProviderId(Long.parseLong(Integer.toString(providerId)));
+		int categoryId = app.getRoleCategoryId();
+		link.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
+		RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+		List<String> rt = new ArrayList<String>();
+		link.setRoles(rt);
+		if(category !=null)
+		for(Roles r:category.getRoles()) {
+			rt.add(r.getRoleName());
+		}
+		if(rt.size()>0) {
+			link.setRoles(rt);
+		};
+		String path = app.getContext()+link.getPath();
+		link.setPath(path.toString());
+		link.setStripPrefix(true);
+		link.setAppId(app.getAppId());
+		List<String> sensitiveHeaders = new ArrayList<String>();
+		sensitiveHeaders.add("Cookie");
+		sensitiveHeaders.add("Set-Cookie");
+		link.setSensitiveHeaders(sensitiveHeaders);
+		repo.save(link);
 		return "fragments/ok";
 	}
 	
@@ -172,9 +198,49 @@ public class ApplicationController extends SingleTemplateController{
 				List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
 				model.addAttribute("listCategories",listCategories);
 				return "fragments/modifyapplication";
+			};
+			
+			List<Link> list = linkRepository.findByAppId(application.getAppId());
+			
+			for(Link l:list){
+				l.setPermitAll(application.getPermitAll()==1?true:false);
+				int categoryId = application.getRoleCategoryId();
+				l.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
+				RoleCategory category = roleCategories.findByRoleCategoryId(l.getCategoryId());
+				List<String> rt = new ArrayList<String>();
+				l.setRoles(rt);
+				if(category !=null)
+				for(Roles r:category.getRoles()) {
+					rt.add(r.getRoleName());
+				}
+				if(rt.size()>0) {
+					l.setRoles(rt);
+				};
+				int providerId = application.getProviderId();
+				l.setProviderId(Long.parseLong(Integer.toString(providerId)));
+				String path = l.getPath();
+				String match = "/";
+				int i =0;
+				int counter = 1;
+			        while((i=(path.indexOf(match,i)+1))>0){
+			        	System.out.println(i);
+						if(counter >= 2){
+							break;
+						}
+			        	counter++;
+				    }
+			        
+			    path = application.getContext()+path.substring(i-1);
+			    l.setPath(path);
+			    
+			    linkRepository.save(l);
 			}
+			
+			
 			applicationRepo.save(application);
 
+			
+			
 			return "fragments/ok";
 	};
 	
@@ -190,9 +256,12 @@ public class ApplicationController extends SingleTemplateController{
 
 	@RequestMapping(value="/modifyapplication",method=RequestMethod.GET)
 	public String modifyApplication(Model model,@RequestParam(name="id",required = false) Long id){
-		
 		Application application = applicationRepo.findByAppId(id);
 		model.addAttribute("application", application);
+		List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
+		model.addAttribute("listProviders",listAuthenticationProvider);		
+		List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
+		model.addAttribute("listCategories",listCategories);
 		return "fragments/modifyapplication";
 	}
 	

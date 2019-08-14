@@ -30,11 +30,11 @@ public class Link {
 	
 	
 	
-	@Size(min=1, max=32, message="Context must be between 1 and 32 characters")
+	@Size(min=1, max=60, message="Context must be between 1 and 60 characters")
 	@Column(name="context", nullable=true, length=255)
 	private String context;
 	
-	@Size(min=1, max=32, message="Service Id must be between 1 and 32 characters")
+	@Size(min=1, max=60, message="Service Id must be between 1 and 60 characters")
 	@Column(name="service_id", nullable=true, length=255)
 	private String serviceId;
 	
