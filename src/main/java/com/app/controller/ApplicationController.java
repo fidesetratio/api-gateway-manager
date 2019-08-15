@@ -43,7 +43,9 @@ import com.app.manager.repo.ApplicationRepository;
 import com.app.manager.repo.AuthenticationProviderRepository;
 import com.app.manager.repo.LinkRepository;
 import com.app.manager.repo.RolesCategoriesRepository;
+import com.app.rest.model.EntityResponse;
 import com.app.services.LinkServices;
+import com.app.utils.AppUtil;
 
 
 @Controller
@@ -70,7 +72,7 @@ public class ApplicationController extends SingleTemplateController{
 
 	@Autowired
 	private LinkRepository linkRepository;
-
+	
 	
 	
 	public String index(HttpServletRequest request, Model model) {
@@ -154,7 +156,6 @@ public class ApplicationController extends SingleTemplateController{
 		link.setContext(context);
 		String serviceId = app.getApplicationName()+"-"+uiidString;
 		System.out.println("uuid:"+serviceId);
-		
 		link.setServiceId(serviceId);
 		link.setActive(true);
 		link.setPermitAll(app.getPermitAll()==1?true:false);
@@ -181,6 +182,8 @@ public class ApplicationController extends SingleTemplateController{
 		sensitiveHeaders.add("Set-Cookie");
 		link.setSensitiveHeaders(sensitiveHeaders);
 		repo.save(link);
+		
+		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
 	
@@ -240,7 +243,8 @@ public class ApplicationController extends SingleTemplateController{
 			applicationRepo.save(application);
 
 			
-			
+
+			AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 			return "fragments/ok";
 	};
 	
@@ -265,24 +269,29 @@ public class ApplicationController extends SingleTemplateController{
 		return "fragments/modifyapplication";
 	}
 	
-	@RequestMapping(value="/remove",method=RequestMethod.GET)
-	public String  remove(@RequestParam(name="removeId",required = false) Long removeId) {
+	@RequestMapping(value="/removeapp",method=RequestMethod.GET)
+	public String  removeapp(@RequestParam(name="removeId",required = false) Long removeId) {
 		Optional<Application> app = applicationRepo.findById(removeId);
 		applicationRepo.delete(app.get());
+		List<Link> list = linkRepository.findByAppId(app.get().getAppId());
+		for(Link l :list){
+			linkRepository.delete(l);
+		};
+
+		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
 	
 	@RequestMapping(value="/index/addLink",method=RequestMethod.GET)
 	public String  addAppLink(@RequestParam(name="categoryId",required = false) Long categoryId,Model model,HttpServletRequest request) {
-	
 		Application application = applicationRepo.findByAppId(categoryId);
 		DataTablesWidget widget = new DataTablesWidget();
 		widget.setTitle("Links Lists");
 		widget.setDestination("/application");
 		widget.addHeader("LinkId");
 		widget.addHeader("Link Id");
-		widget.addHeader("Context");
-		widget.addHeader("ServiceId");
+		widget.addHeader("Url");
+		widget.addHeader("Path");
 		widget.addHeader("PermitAll");
 		widget.addHeader("Active");
 		widget.setHiddenCategory(Long.toString(categoryId));
@@ -338,8 +347,6 @@ public class ApplicationController extends SingleTemplateController{
 	    String filename = uploadfile.getOriginalFilename();
 	    String directory =  env.getProperty("folder.images");
 	    String filepath = Paths.get(directory, filename).toString();
-	    
-	    // Save the file locally
 	    BufferedOutputStream stream =
 	        new BufferedOutputStream(new FileOutputStream(new File(filepath)));
 	    stream.write(uploadfile.getBytes());
@@ -352,5 +359,21 @@ public class ApplicationController extends SingleTemplateController{
 	  
 	  return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	
+	@RequestMapping(value="/remove",method=RequestMethod.POST,produces="application/json")
+	public @ResponseBody EntityResponse remove(@RequestBody  List<Link> list) {
+		for(Link details:list){
+			Link clientDetails = details;
+			repo.deleteById(clientDetails.getLinkId());
+		}
+		EntityResponse response = new EntityResponse();
+
+		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
+		return response;
+	}
+	
+	
+	
 	
 }

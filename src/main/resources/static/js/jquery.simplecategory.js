@@ -23,7 +23,7 @@
         var mainUrl = $(this).attr("application-url");
        	var url = mainUrl+"/"+"addForm";
        	var list = mainUrl+"/"+"listsdata";
-       	var remove = mainUrl+"/"+"remove";
+       	var remove = mainUrl+"/"+"removeapp";
        	var uploadFileUrl = mainUrl+"/"+"uploadFile";
 
        	var addLink = mainUrl+"/index/"+"addLink";
@@ -34,7 +34,6 @@
        		url: list+"?search="+search,
        	    type: 'get',
        	    success: function(response) {
-       	    	
        	    	$.each(response, function (index, value) {
        	    		var html = '<div class="col-md-4 col-sm-4 col-xs-12 profile_details">';
        	    		html = html+'<div class="well profile_view">';

@@ -4,6 +4,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import com.app.rest.model.ClientDetails;
 import com.google.gson.Gson;
 
 public class AppUtil {
@@ -86,5 +90,13 @@ public class AppUtil {
 		return sb.toString();		
 	}
 	
+	
+	public static String reloadApiGateway(String uri){
+		 String result = "";
+		 RestTemplate restTemplate = new RestTemplate();
+		 ResponseEntity<String> response   = restTemplate.getForEntity(uri + "gwadmin/reload", String.class);
+		 result = response.getBody();
+		 return result;
+	}
 
 }
