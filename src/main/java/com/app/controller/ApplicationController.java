@@ -276,11 +276,6 @@ public class ApplicationController extends SingleTemplateController{
 			linkRepository.delete(l);
 		}
 		applicationRepo.delete(app.get());
-		List<Link> list = linkRepository.findByAppId(app.get().getAppId());
-		for(Link l :list){
-			linkRepository.delete(l);
-		};
-
 		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
