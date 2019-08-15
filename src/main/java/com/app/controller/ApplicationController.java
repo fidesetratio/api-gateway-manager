@@ -226,8 +226,7 @@ public class ApplicationController extends SingleTemplateController{
 				int i =0;
 				int counter = 1;
 			        while((i=(path.indexOf(match,i)+1))>0){
-			        	System.out.println(i);
-						if(counter >= 2){
+			        	if(counter >= 2){
 							break;
 						}
 			        	counter++;
@@ -272,6 +271,10 @@ public class ApplicationController extends SingleTemplateController{
 	@RequestMapping(value="/removeapp",method=RequestMethod.GET)
 	public String  removeapp(@RequestParam(name="removeId",required = false) Long removeId) {
 		Optional<Application> app = applicationRepo.findById(removeId);
+		List<Link> list = linkRepository.findByAppId(app.get().getAppId());
+		for(Link l:list) {
+			linkRepository.delete(l);
+		}
 		applicationRepo.delete(app.get());
 		List<Link> list = linkRepository.findByAppId(app.get().getAppId());
 		for(Link l :list){
