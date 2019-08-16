@@ -93,9 +93,14 @@ public class AppUtil {
 	
 	public static String reloadApiGateway(String uri){
 		 String result = "";
+		try{
+		
 		 RestTemplate restTemplate = new RestTemplate();
 		 ResponseEntity<String> response   = restTemplate.getForEntity(uri + "gwadmin/reload", String.class);
 		 result = response.getBody();
+		}catch(Exception e){
+		 result = "error:"+e.getMessage();
+		}
 		 return result;
 	}
 

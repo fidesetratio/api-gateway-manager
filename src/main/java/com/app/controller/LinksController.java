@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +39,7 @@ import com.app.manager.repo.LinkRepository;
 import com.app.manager.repo.RolesCategoriesRepository;
 import com.app.rest.model.EntityResponse;
 import com.app.services.LinkServices;
+import com.app.utils.AppUtil;
 
 @Controller
 @RequestMapping("/links")
@@ -54,6 +56,9 @@ public class LinksController extends SimpleCrud {
 	@Autowired
 	private AuthenticationProviderRepository authenticationProviderRepository;
 	
+	
+	@Autowired
+	private Environment env;
 	
 	
 	private Logger logger = LoggerFactory.getLogger(LinksController.class);
@@ -111,6 +116,7 @@ public class LinksController extends SimpleCrud {
 			Link clientDetails = details;
 			repo.deleteById(clientDetails.getLinkId());
 		}
+		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		EntityResponse response = new EntityResponse();
 		return response;
 		
@@ -162,6 +168,7 @@ public class LinksController extends SimpleCrud {
 			return "fragments/addlinks";
 		}
 		linkRepository.save(link);
+		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
 	
@@ -241,6 +248,7 @@ public class LinksController extends SimpleCrud {
 			return "fragments/modifylinks";
 		}
 		linkRepository.save(link);
+		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
 	

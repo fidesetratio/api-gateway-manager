@@ -15,10 +15,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,12 +83,80 @@ public class ApplicationController extends SingleTemplateController{
 		model.addAttribute("titleprovider", "Application");
 		model.addAttribute("providercontent","fragments/"+target);
 		return data;
-	}
+	};
+	
+	
+	
 
+	
+	
+
+	
+	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
+            MediaType.APPLICATION_XHTML_XML_VALUE })
+	public String modify(@RequestBody Link l,Model model){
+			///logger.info("modify"+detail.getClientId());
+			Link link = linkRepository.findByLinkId(l.getLinkId());
+			
+			String path = link.getPath();
+			String match = "/";
+			int i =0;
+			int counter = 1;
+		        while((i=(path.indexOf(match,i)+1))>0){
+		        	if(counter >= 2){
+						break;
+					}
+		        	counter++;
+			    }
+		        
+		    path = path.substring(i-1);
+		    link.setPath(path);
+		    model.addAttribute("link", link);
+			
+		    return "fragments/modifyLinkByApp";
+			
+	}
+	
+	
+	
+	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
+	public String modifysubmit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			for(FieldError error:bindingResult.getFieldErrors()) {
+				System.out.println(error.getField()+":"+error.getDefaultMessage());
+			};
+			
+			
+			String path = link.getPath();
+			String match = "/";
+			int i =0;
+			int counter = 1;
+		        while((i=(path.indexOf(match,i)+1))>0){
+		        	if(counter >= 2){
+						break;
+					}
+		        	counter++;
+			    }
+		        
+		    path = path.substring(i-1);
+		    link.setPath(path);
+		    model.addAttribute("link", link);
+		    return "fragments/modifyLinkByApp";
+			
+		}
+		
+		String path = "";
+		Application application = applicationRepo.findByAppId(link.getAppId());
+		path = application.getContext()+link.getPath();
+	    path = path.trim();
+	    link.setPath(path);
+	    repo.save(link);
+		return "fragments/ok";
+	}
+	
 	
 	@RequestMapping(value="/addForm",method=RequestMethod.GET)
 	public String addForm(Model model){
-			System.out.println("patar");
 			model.addAttribute("application", new Application());
 			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 			model.addAttribute("listProviders",listAuthenticationProvider);		
@@ -98,11 +168,7 @@ public class ApplicationController extends SingleTemplateController{
 	
 	@RequestMapping(value="/addForm/submit",method=RequestMethod.POST)
 	public String addFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
-			System.out.println("patar submit");			
 			if (bindingResult.hasErrors()) {
-				for(ObjectError er:bindingResult.getAllErrors()) {
-					System.out.println("error:"+er.getDefaultMessage());
-				}
 				model.addAttribute("application", application);
 				List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 				model.addAttribute("listProviders",listAuthenticationProvider);		
@@ -184,11 +250,12 @@ public class ApplicationController extends SingleTemplateController{
 		repo.save(link);
 		
 		AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
+		
 		return "fragments/ok";
 	}
 	
 	
-	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
+	@RequestMapping(value="/modifyapplication/submit",method=RequestMethod.POST)
 	public String modifyFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
 			System.out.println("patar submit");			
 			if (bindingResult.hasErrors()) {
