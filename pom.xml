@@ -131,8 +131,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                    <executable>true</executable>
+                    <mainClass>com.app.Application</mainClass>
+                    <outputDirectory>${outputDirectory}</outputDirectory>
+                </configuration>
 			</plugin>
 		</plugins>
+		
+		
+		
 </build>
 
 </project>
