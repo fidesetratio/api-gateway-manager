@@ -1,3 +1,4 @@
-Api Gateway Manager
+API Gateway Manager
 
-https://scottizu.wordpress.com/2014/04/30/getting-started-with-the-jenkins-api/
+Api Gateway Manager adalah aplikasi gui yang membantu mengatur untuk api gateway
+engine, web scheduler engine untuk melakukan tugasnya.
