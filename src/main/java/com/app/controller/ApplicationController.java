@@ -99,18 +99,24 @@ public class ApplicationController extends SingleTemplateController{
 			Link link = linkRepository.findByLinkId(l.getLinkId());
 			
 			String path = link.getPath();
+			
 			String match = "/";
 			int i =0;
 			int counter = 1;
-		        while((i=(path.indexOf(match,i)+1))>0){
+		   try {    
+			while((i=(path.indexOf(match,i)+1))>0){
 		        	if(counter >= 2){
 						break;
 					}
 		        	counter++;
-			    }
+			   }
 		        
 		    path = path.substring(i-1);
 		    link.setPath(path);
+		   }catch(Exception e) {
+			   e.printStackTrace();
+		   }
+		    
 		    model.addAttribute("link", link);
 			
 		    return "fragments/modifyLinkByApp";
