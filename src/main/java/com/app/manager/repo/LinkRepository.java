@@ -15,6 +15,8 @@ public interface LinkRepository  extends PagingAndSortingRepository<Link,Long>,J
 	public Link findByLinkId(Long linkId);
 	public Page<Link> findByAppId(Long appId,Pageable pageable);
 	public List<Link> findByAppId(Long appId);
+	public Link findByUrlContainingAndAppId(String url,long appId);
+	public Link findByPathContainingAndAppId(String path,long appId);
 }
 
 

@@ -115,7 +115,7 @@ public class ApplicationController extends SingleTemplateController{
 		    link.setPath(path);
 		   }catch(Exception e) {
 			   e.printStackTrace();
-		   }
+		   };
 		    
 		    model.addAttribute("link", link);
 			
@@ -157,6 +157,7 @@ public class ApplicationController extends SingleTemplateController{
 	    path = path.trim();
 	    link.setPath(path);
 	    repo.save(link);
+	    AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
 	
@@ -183,7 +184,64 @@ public class ApplicationController extends SingleTemplateController{
 				return "fragments/addapplication";
 			};
 			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			applicationRepo.save(application);
+			int providerId1 = application.getProviderId();
+			if(providerId1>0){
+				Optional opt =	authenticationProviderRepository.findById(Long.parseLong(Integer.toString(providerId1)));
+				AuthenticationProvider prov = (AuthenticationProvider)opt.get();
+			    String url = prov.getUrl();
+			    String token = "oauth/check_token";
+			    String host = url.trim().substring(0,url.trim().indexOf(token));
+			    Link li = new Link();
+			    UUID uiid = UUID.randomUUID();
+				String uiidString = uiid.toString();
+				String context = application.getApplicationName()+"-"+uiidString;
+				li.setContext(context);
+				String serviceId = application.getApplicationName()+"-"+uiidString;
+				System.out.println("uuid:"+serviceId);
+				li.setServiceId(serviceId);
+				li.setActive(true);
+				li.setPermitAll(true);
+				int providerId = application.getProviderId();
+				li.setProviderId(Long.parseLong(Integer.toString(providerId)));
+				int categoryId = application.getRoleCategoryId();
+				li.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
+				String tokenPath = application.getContext()+"/api/token/**";
+				li.setPath(tokenPath);
+				li.setStripPrefix(true);
+				li.setAppId(application.getAppId());
+				li.setPermitAll(true);
+				List<String> sensitiveHeaders = new ArrayList<String>();
+				sensitiveHeaders.add("Cookie");
+				sensitiveHeaders.add("Set-Cookie");
+				li.setSensitiveHeaders(sensitiveHeaders);
+				li.setUrl(host+"oauth/token");
+				Link t = repo.findByUrlContainingAndAppId(li.getUrl().trim(), application.getAppId());
+				if(t==null){
+					System.out.println("di create nih");
+				repo.save(li);
+				}else{
+					System.out.println("udah ada oii");
+				}
+				
+			}else{
+				String tokenPath = application.getContext()+"/api/token";
+				Link t = repo.findByPathContainingAndAppId(tokenPath, application.getAppId());
+				repo.delete(t);
+			}
+			
+			
+			
+			
 
 			return "fragments/ok";
 	};
@@ -265,9 +323,7 @@ public class ApplicationController extends SingleTemplateController{
 	public String modifyFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
 			System.out.println("patar submit");			
 			if (bindingResult.hasErrors()) {
-				for(ObjectError er:bindingResult.getAllErrors()) {
-					System.out.println("error:"+er.getDefaultMessage());
-				}
+			
 				model.addAttribute("application", application);
 				List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 				model.addAttribute("listProviders",listAuthenticationProvider);		
@@ -275,6 +331,19 @@ public class ApplicationController extends SingleTemplateController{
 				model.addAttribute("listCategories",listCategories);
 				return "fragments/modifyapplication";
 			};
+			
+			
+			
+			
+			
+		    
+			
+		
+			
+			
+			
+			
+			
 			
 			List<Link> list = linkRepository.findByAppId(application.getAppId());
 			
@@ -316,6 +385,58 @@ public class ApplicationController extends SingleTemplateController{
 
 			
 
+			
+			
+			
+
+			int providerId1 = application.getProviderId();
+			if(providerId1>0){
+				Optional opt =	authenticationProviderRepository.findById(Long.parseLong(Integer.toString(providerId1)));
+				AuthenticationProvider prov = (AuthenticationProvider)opt.get();
+			    String url = prov.getUrl();
+			    String token = "oauth/check_token";
+			    String host = url.trim().substring(0,url.trim().indexOf(token));
+			    Link li = new Link();
+			    UUID uiid = UUID.randomUUID();
+				String uiidString = uiid.toString();
+				String context = application.getApplicationName()+"-"+uiidString;
+				li.setContext(context);
+				String serviceId = application.getApplicationName()+"-"+uiidString;
+				System.out.println("uuid:"+serviceId);
+				li.setServiceId(serviceId);
+				li.setActive(true);
+				li.setPermitAll(true);
+				int providerId = application.getProviderId();
+				li.setProviderId(Long.parseLong(Integer.toString(providerId)));
+				int categoryId = application.getRoleCategoryId();
+				li.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
+				String tokenPath = application.getContext()+"/api/token/**";
+				li.setPath(tokenPath);
+				li.setStripPrefix(true);
+				li.setAppId(application.getAppId());
+				li.setPermitAll(true);
+				List<String> sensitiveHeaders = new ArrayList<String>();
+				sensitiveHeaders.add("Cookie");
+				sensitiveHeaders.add("Set-Cookie");
+				li.setSensitiveHeaders(sensitiveHeaders);
+				li.setUrl(host+"oauth/token");
+				Link t = repo.findByUrlContainingAndAppId(li.getUrl().trim(), application.getAppId());
+				if(t==null){
+					System.out.println("di create nih");
+				repo.save(li);
+				}else{
+					System.out.println("udah ada oii");
+				}
+				
+			}else{
+				String tokenPath = application.getContext()+"/api/token";
+				Link t = repo.findByPathContainingAndAppId(tokenPath, application.getAppId());
+				repo.delete(t);
+			}
+			
+			
+			
+			
 			AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 			return "fragments/ok";
 	};
