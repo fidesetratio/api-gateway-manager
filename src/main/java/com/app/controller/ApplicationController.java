@@ -133,6 +133,10 @@ public class ApplicationController extends SingleTemplateController{
 			};
 			
 			
+			
+			
+			
+			
 			String path = link.getPath();
 			String match = "/";
 			int i =0;
@@ -152,11 +156,15 @@ public class ApplicationController extends SingleTemplateController{
 		}
 		
 		String path = "";
+		Link temp = linkRepository.findByLinkId(link.getLinkId());
 		Application application = applicationRepo.findByAppId(link.getAppId());
 		path = application.getContext()+link.getPath();
 	    path = path.trim();
-	    link.setPath(path);
-	    repo.save(link);
+	    temp.setActive(link.isActive());
+	    temp.setPermitAll(link.isPermitAll());
+	    temp.setUrl(link.getUrl().trim());
+	    temp.setPath(path);  
+	    repo.save(temp);
 	    AppUtil.reloadApiGateway(env.getProperty("url.api.gateway"));
 		return "fragments/ok";
 	}
