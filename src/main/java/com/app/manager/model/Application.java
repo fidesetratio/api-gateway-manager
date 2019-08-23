@@ -1,12 +1,15 @@
 package com.app.manager.model;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import com.app.manager.converter.BooleanStringConverter;
 
 @Entity
 @Table(name="application")
@@ -43,11 +46,25 @@ public class Application {
 	@Column(name="providerId")
 	private int providerId;
 	
+	
+
+	@Column(name="resourceid", nullable=true, length=255)
+	private String resourceid;
+	
+	
+	
+	
+	@Column(name="strict", nullable=true, length=255)
+	@Convert(converter=BooleanStringConverter.class)
+	private boolean strict;
+	
 	public Application(){
 		this.photo = "imagenotavailable.png";
 		this.permitAll = 0;
 		this.providerId = 0;
 		this.roleCategoryId =0;
+		this.resourceid = "";
+		this.strict = false;
 	}
 
 	public Long getAppId() {
@@ -112,6 +129,22 @@ public class Application {
 
 	public void setProviderId(int providerId) {
 		this.providerId = providerId;
+	}
+
+	public String getResourceid() {
+		return resourceid;
+	}
+
+	public void setResourceid(String resourceid) {
+		this.resourceid = resourceid;
+	}
+
+	public boolean isStrict() {
+		return strict;
+	}
+
+	public void setStrict(boolean strict) {
+		this.strict = strict;
 	}
 	
 

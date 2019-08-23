@@ -128,15 +128,6 @@ public class ApplicationController extends SingleTemplateController{
 	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
 	public String modifysubmit(@Valid @ModelAttribute("link")  Link link, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			for(FieldError error:bindingResult.getFieldErrors()) {
-				System.out.println(error.getField()+":"+error.getDefaultMessage());
-			};
-			
-			
-			
-			
-			
-			
 			String path = link.getPath();
 			String match = "/";
 			int i =0;
@@ -161,6 +152,8 @@ public class ApplicationController extends SingleTemplateController{
 		path = application.getContext()+link.getPath();
 	    path = path.trim();
 	    temp.setActive(link.isActive());
+	    temp.setStrict(application.isStrict());
+	    temp.setResourceid(application.getResourceid().trim());
 	    temp.setPermitAll(link.isPermitAll());
 	    temp.setUrl(link.getUrl().trim());
 	    temp.setPath(path);  
@@ -183,12 +176,21 @@ public class ApplicationController extends SingleTemplateController{
 	
 	@RequestMapping(value="/addForm/submit",method=RequestMethod.POST)
 	public String addFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
-			if (bindingResult.hasErrors()) {
+			
+		if(application.isStrict()){
+			if(application.getResourceid().trim().equals("")){
+				  bindingResult.rejectValue("resourceid","error.resourceid",
+						  "Resource Id is not allowed empty");
+			}
+		
+		}
+		
+		if (bindingResult.hasErrors()) {
 				model.addAttribute("application", application);
 				List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 				model.addAttribute("listProviders",listAuthenticationProvider);		
 				List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
-				model.addAttribute("listCategories",listCategories);
+				model.addAttribute("listCategories",listCategories);				
 				return "fragments/addapplication";
 			};
 			
@@ -302,6 +304,8 @@ public class ApplicationController extends SingleTemplateController{
 		int categoryId = app.getRoleCategoryId();
 		link.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
 		RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+		link.setStrict(app.isStrict());
+		link.setResourceid(app.getResourceid().trim());
 		List<String> rt = new ArrayList<String>();
 		link.setRoles(rt);
 		if(category !=null)
@@ -329,8 +333,17 @@ public class ApplicationController extends SingleTemplateController{
 	
 	@RequestMapping(value="/modifyapplication/submit",method=RequestMethod.POST)
 	public String modifyFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
-			System.out.println("patar submit");			
-			if (bindingResult.hasErrors()) {
+			
+		if(application.isStrict()){
+			if(application.getResourceid().trim().equals("")){
+				  bindingResult.rejectValue("resourceid","error.resourceid",
+						  "Resource Id is not allowed empty");
+			}
+		
+		};
+		
+		
+		if (bindingResult.hasErrors()) {
 			
 				model.addAttribute("application", application);
 				List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
@@ -354,9 +367,13 @@ public class ApplicationController extends SingleTemplateController{
 			
 			
 			List<Link> list = linkRepository.findByAppId(application.getAppId());
-			
 			for(Link l:list){
+				if(l.getUrl().trim().contains("/oauth/token")){
+					continue;
+				}
 				l.setPermitAll(application.getPermitAll()==1?true:false);
+				l.setResourceid(application.getResourceid());
+				l.setStrict(application.isStrict());
 				int categoryId = application.getRoleCategoryId();
 				l.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
 				RoleCategory category = roleCategories.findByRoleCategoryId(l.getCategoryId());

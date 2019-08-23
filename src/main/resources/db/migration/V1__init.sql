@@ -15,6 +15,8 @@ CREATE TABLE `application` (
   `permitAll` int(11) NOT NULL DEFAULT '0',
   `roleCategoryId` int(11) NOT NULL DEFAULT '0',
   `providerId` int(11) NOT NULL DEFAULT '0',
+   strict varchar(2) default 'N',
+   resourceid varchar(255) default null,
   PRIMARY KEY (`appId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 

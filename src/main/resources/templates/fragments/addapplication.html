@@ -106,6 +106,38 @@
 							 
 						</div>	
 					</div>
+					
+					
+							<div class="row">
+									
+						<div class="col-sm-12 form-group" >
+							<label for="active">Strict</label>
+						
+		   	 				  
+			 <select class="form-control" th:field="*{strict}">
+		   	  <option th:value="1" data-th-field="*{strict}" th:selected="${permitAll==true}">true</option>
+		   	  <option th:value="0" data-th-field="*{strict}" th:selected="${permitAll==false}">false</option>
+			</select>
+			
+	
+							 
+						</div>	
+					</div>
+					
+								<div class="row">
+									
+						<div class="col-sm-12 form-group"  th:classappend="${#fields.hasErrors('resourceid')} ? 'has-warning' : ''">
+							<label for="active">Resource Id</label>
+						
+		   	 				  
+				<input type="text" placeholder="Enter Resource Id.. " class="form-control" th:field="*{resourceid}" >
+							 <span th:if="${#fields.hasErrors('resourceid')}" class="help-block" th:errors="*{resourceid}"></span>
+							
+			
+	
+							 
+						</div>	
+					</div>
 				</form> 
 				
 	</div>
