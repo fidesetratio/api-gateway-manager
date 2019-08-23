@@ -344,7 +344,6 @@ public class ApplicationController extends SingleTemplateController{
 		
 		
 		if (bindingResult.hasErrors()) {
-			
 				model.addAttribute("application", application);
 				List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 				model.addAttribute("listProviders",listAuthenticationProvider);		
@@ -352,20 +351,7 @@ public class ApplicationController extends SingleTemplateController{
 				model.addAttribute("listCategories",listCategories);
 				return "fragments/modifyapplication";
 			};
-			
-			
-			
-			
-			
-		    
-			
-		
-			
-			
-			
-			
-			
-			
+
 			List<Link> list = linkRepository.findByAppId(application.getAppId());
 			for(Link l:list){
 				if(l.getUrl().trim().contains("/oauth/token")){
