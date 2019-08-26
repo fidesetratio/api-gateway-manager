@@ -310,8 +310,13 @@ public class ApplicationController extends SingleTemplateController{
 		int categoryId = app.getRoleCategoryId();
 		link.setCategoryId(Long.parseLong(Integer.toString(categoryId)));
 		RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+		if(!app.isStrict()){
 		link.setStrict(app.isStrict());
+		if(app.getResourceid() != null)
 		link.setResourceid(app.getResourceid().trim());
+		}else{
+			app.setResourceid("");
+		}
 		List<String> rt = new ArrayList<String>();
 		link.setRoles(rt);
 		if(category !=null)
