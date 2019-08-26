@@ -152,8 +152,14 @@ public class ApplicationController extends SingleTemplateController{
 		path = application.getContext()+link.getPath();
 	    path = path.trim();
 	    temp.setActive(link.isActive());
+	    
+	    if(application.isStrict()){
 	    temp.setStrict(application.isStrict());
 	    temp.setResourceid(application.getResourceid().trim());
+	    }else{
+	    	   temp.setStrict(false);
+	    	   temp.setResourceid("");
+	    }
 	    temp.setPermitAll(link.isPermitAll());
 	    temp.setUrl(link.getUrl().trim());
 	    temp.setPath(path);  
