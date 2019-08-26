@@ -3,7 +3,7 @@
  
  
 	<div class="row">
-				<form method="POST"  th:object="${clientDetail}" th:action="@{'/client/modify/submit'}">
+				<form method="POST"  th:object="${clientDetail}" th:action="@{'/clienttemp/modify/submit'}">
 			
 					<div id="home" class="col-sm-12 tab-pane fade in active">
 						<div class="row">
@@ -81,7 +81,7 @@
 							 
 						</div>	
 					</div>
-				
+				<input type="hidden" id="categoryid" name="categoryid" th:value="${categoryid}"/>
 					</div>
 				</form> 
 </div>

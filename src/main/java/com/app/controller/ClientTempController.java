@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -69,44 +70,51 @@ public class ClientTempController  extends SimpleCrud {
 
 	@Override
 	public TablePage listsPage(PaginationCriteria treq) {
-		
+		String requestUri = uri;
 		SelectValue select = treq.getSelectcategory();
 		if(select != null) {
-			
-			System.out.println("select page="+select.getValue());
-			
-
-			
 			Optional<AuthenticationProvider> opt = 	authRepo.findById(Long.parseLong(select.getValue()));
-			AuthenticationProvider o = opt.get();
-			if(o != null) {
-			
-				System.out.println("url:"+o.getUrl());
-			}
-			
-		}else {
-			System.out.println("pret");
-		}
-		
+			if(opt.isPresent()){
+				AuthenticationProvider o = opt.get();
+				if(o != null) {
+					requestUri = getHost(o.getUrl()); 
+					
+				}
+			};
+		};		
 		
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<TablePage> response   = restTemplate.postForEntity(uri + "manager/listclientstable", treq, TablePage.class);
+		ResponseEntity<TablePage> response   = restTemplate.postForEntity(requestUri + "manager/listclientstable", treq, TablePage.class);
 		return response.getBody();
 	}
 
 	@RequestMapping(value="/add",method=RequestMethod.GET)
-	public String add(Model model){
-			model.addAttribute("clientDetail", new ClientDetails());
+	public String add(Model model,@RequestParam(name="categoryid",required = false) Long categoryid){
+	
+		model.addAttribute("categoryid", categoryid);
+		model.addAttribute("clientDetail", new ClientDetails());
 			return "fragments/addclient";
 	}
 	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
-	public String submit(@Valid @ModelAttribute("clientDetail")  ClientDetails clientDetail, BindingResult bindingResult, Model model) {
+	public String submit(@Valid @ModelAttribute("clientDetail")  ClientDetails clientDetail,@RequestParam(name="categoryid",required = false) Long categoryid, BindingResult bindingResult, Model model) {
+	
+
+		String requestUri = uri;
+		Optional<AuthenticationProvider> opt = 	authRepo.findById(categoryid);
+		if(opt.isPresent()){
+			AuthenticationProvider o = opt.get();
+			if(o != null) {
+				requestUri = getHost(o.getUrl()); 
+				
+			}
+		};
+		
 		if (bindingResult.hasErrors()) {
 			logger.info("there is an error here");
 			for(FieldError error:bindingResult.getFieldErrors()) {
 				System.out.println(error.getField()+":"+error.getDefaultMessage());
 			}
-			
+			model.addAttribute("categoryId", categoryid);
 			model.addAttribute("clientDetail", clientDetail);
 			return "fragments/addclient";
 		}
@@ -114,12 +122,11 @@ public class ClientTempController  extends SimpleCrud {
 		RestTemplate restTemplate = new RestTemplate();
 		try {
 			HttpEntity<ClientDetails> request = new HttpEntity<ClientDetails>(clientDetail);
-			ResponseEntity<String> result =  restTemplate.postForEntity(uri+"manager/saveclient", request, String.class);			
+			ResponseEntity<String> result =  restTemplate.postForEntity(requestUri+"manager/saveclient", request, String.class);			
 			}catch (Exception e) {
 				e.printStackTrace();
 				return "fragments/error";
-			}
-		System.out.println("patar timotius");		
+			}	
 		return "fragments/ok";
 	}
 	
@@ -127,40 +134,60 @@ public class ClientTempController  extends SimpleCrud {
 	
 	@RequestMapping(value="/modify",method=RequestMethod.POST,consumes="application/json",produces = { MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_XHTML_XML_VALUE })
-	public String modify(@RequestBody ClientDetails detail,Model model){
-			logger.info("modify"+detail.getClientId());
-
+	public String modify(@RequestBody ClientDetails detail,@RequestParam(name="categoryid",required=false) String categoryId,Model model){
+			String requestUri = uri;
+			Optional<AuthenticationProvider> opt = 	authRepo.findById(Long.parseLong(categoryId));
+			if(opt.isPresent()){
+				AuthenticationProvider o = opt.get();
+				if(o != null) {
+					requestUri = getHost(o.getUrl()); 
+					
+				}
+			};
 			RestTemplate restTemplate = new RestTemplate();
 			HttpEntity<ClientDetails> request = new HttpEntity<ClientDetails>(detail);
 			ClientDetails d = new ClientDetails();
 			try {
-				d = restTemplate.getForObject(uri+"manager/viewclient/"+detail.getClientId(), ClientDetails.class);
+				d = restTemplate.getForObject(requestUri+"manager/viewclient/"+detail.getClientId(), ClientDetails.class);
 			}catch(Exception e) {
 					e.printStackTrace();
 			}
 			model.addAttribute("clientDetail", d);
+			model.addAttribute("categoryid", categoryId);			
 			return "fragments/modifyclient";
 	}
 	
 	
 	
 	@RequestMapping(value="/modify/submit",method=RequestMethod.POST)
-	public String modifysubmit(@Valid @ModelAttribute("clientDetail")  ClientDetails clientDetail, BindingResult bindingResult, Model model) {
+	public String modifysubmit(@Valid @ModelAttribute("clientDetail")  ClientDetails clientDetail,@RequestParam(name="categoryid",required=false) String categoryId, BindingResult bindingResult, Model model) {
+		
+		String requestUri = uri;
+	
+		Optional<AuthenticationProvider> opt = 	authRepo.findById(Long.parseLong(categoryId));
+		if(opt.isPresent()){
+			AuthenticationProvider o = opt.get();
+			if(o != null) {
+				requestUri = getHost(o.getUrl()); 
+				System.out.println("categoryId"+requestUri);		
+			}
+		};
+		
+		
 		if (bindingResult.hasErrors()) {
 			logger.info("there is an error here");
 			for(FieldError error:bindingResult.getFieldErrors()) {
 				System.out.println(error.getField()+":"+error.getDefaultMessage());
 			};
-			
-			
+			model.addAttribute("categoryid", categoryId);	
 			model.addAttribute("clientDetail", clientDetail);
-			return "fragments/addclient";
+			return "fragments/modifyclient";
 		}
 		
 		RestTemplate restTemplate = new RestTemplate();
 		try {
 			HttpEntity<ClientDetails> request = new HttpEntity<ClientDetails>(clientDetail);
-			ResponseEntity<String> result =  restTemplate.postForEntity(uri+"manager/saveclient", request, String.class);			
+			ResponseEntity<String> result =  restTemplate.postForEntity(requestUri+"manager/saveclient", request, String.class);			
 			}catch (Exception e) {
 				e.printStackTrace();
 				return "fragments/error";
@@ -172,9 +199,9 @@ public class ClientTempController  extends SimpleCrud {
 
 	
 	@RequestMapping(value="/remove",method=RequestMethod.POST,produces="application/json")
-	public @ResponseBody EntityResponse remove(@RequestBody  List<ClientDetails> list) {
+	public @ResponseBody EntityResponse remove(@RequestBody  List<ClientDetails> list,@RequestParam(name="categoryid",required=false) String categoryId) {
 		logger.info("size:"+list.size());
-		
+		System.out.println("categoryIddad:"+categoryId);
 		
 		for(ClientDetails details:list){
 			ClientDetails clientDetails = details;
@@ -199,6 +226,10 @@ public class ClientTempController  extends SimpleCrud {
 	}
 
 	
+	private static String getHost(String host){
+		int pos = host.trim().indexOf("oauth/check_token");
+		return host.substring(0,pos);
+	}
 	
 
 }

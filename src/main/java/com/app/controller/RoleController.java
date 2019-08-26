@@ -91,6 +91,8 @@ public class RoleController  extends SimpleCrud {
 	
 	@RequestMapping(value="/add/submit",method=RequestMethod.POST)
 	public String submit(@Valid @ModelAttribute("r")  Roles r,BindingResult bindingResult, Model model, @RequestParam(name="categoryid",required = false) Long categoryid) {
+	
+		
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("r",r);
 			model.addAttribute("allowed", new Integer(1));
