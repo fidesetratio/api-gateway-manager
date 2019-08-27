@@ -345,6 +345,7 @@ public class ApplicationController extends SingleTemplateController{
 	@RequestMapping(value="/modifyapplication/submit",method=RequestMethod.POST)
 	public String modifyFormSubmit(@Valid @ModelAttribute("application")  Application application, BindingResult bindingResult, Model model){
 			
+		System.out.println("controller app");
 		if(application.isStrict()){
 			if(application.getResourceid().trim().equals("")){
 				  bindingResult.rejectValue("resourceid","error.resourceid",
@@ -364,7 +365,9 @@ public class ApplicationController extends SingleTemplateController{
 			};
 
 			List<Link> list = linkRepository.findByAppId(application.getAppId());
+			System.out.println("jalan nihh");
 			for(Link l:list){
+				System.out.println("database");
 				if(l.getUrl().trim().contains("/oauth/token")){
 					continue;
 				}
@@ -388,6 +391,7 @@ public class ApplicationController extends SingleTemplateController{
 				String path = l.getPath();
 				String match = "/";
 				int i =0;
+				System.out.println("hehehe");
 				int counter = 1;
 			        while((i=(path.indexOf(match,i)+1))>0){
 			        	if(counter >= 2){
@@ -400,20 +404,21 @@ public class ApplicationController extends SingleTemplateController{
 			    l.setPath(path);
 			    
 			    linkRepository.save(l);
+			    System.out.println("masuk tapi gimana gitu");
 			}
-			
+			System.out.println("dapat ngak sih?");
 			
 			applicationRepo.save(application);
 
 			
 
 			
-			
-			
 
 			int providerId1 = application.getProviderId();
 			if(providerId1>0){
+				System.out.println("dapat ngak s1ih?");
 				Optional opt =	authenticationProviderRepository.findById(Long.parseLong(Integer.toString(providerId1)));
+				System.out.println("provider ID null yes");
 				AuthenticationProvider prov = (AuthenticationProvider)opt.get();
 			    String url = prov.getUrl();
 			    String token = "oauth/check_token";
@@ -453,6 +458,7 @@ public class ApplicationController extends SingleTemplateController{
 			}else{
 				String tokenPath = application.getContext()+"/api/token";
 				Link t = repo.findByPathContainingAndAppId(tokenPath, application.getAppId());
+				if(t != null)
 				repo.delete(t);
 			}
 			
