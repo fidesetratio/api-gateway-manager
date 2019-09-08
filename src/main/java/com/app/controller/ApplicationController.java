@@ -252,7 +252,9 @@ public class ApplicationController extends SingleTemplateController{
 			}else{
 				String tokenPath = application.getContext()+"/api/token";
 				Link t = repo.findByPathContainingAndAppId(tokenPath, application.getAppId());
+				if(t != null)
 				repo.delete(t);
+				
 			}
 			
 			
