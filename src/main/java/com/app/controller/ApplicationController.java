@@ -100,6 +100,7 @@ public class ApplicationController extends SingleTemplateController{
 			
 			String path = link.getPath();
 			
+			
 			String match = "/";
 			int i =0;
 			int counter = 1;
@@ -118,7 +119,20 @@ public class ApplicationController extends SingleTemplateController{
 		   };
 		    
 		    model.addAttribute("link", link);
-			
+		    RoleCategory category = roleCategories.findByRoleCategoryId(link.getCategoryId());
+		    List<String> rt = new ArrayList<String>();
+		    StringBuffer buf = new StringBuffer();
+		    String app = "";
+		    if(category.getRoles().size()>0){
+			    for(Roles r:category.getRoles()) {
+			    	buf.append(r.getRoleName());
+			    	buf.append(";");
+			   }
+			     app = buf.toString();
+			     app = app.substring(0,app.length()-1);
+			     app = "["+app+"]";
+		    };
+		    model.addAttribute("rolesDescription", app);
 		    return "fragments/modifyLinkByApp";
 			
 	}
@@ -148,14 +162,16 @@ public class ApplicationController extends SingleTemplateController{
 		
 		String path = "";
 		Link temp = linkRepository.findByLinkId(link.getLinkId());
+		if(link.getRoles() != null)
+		temp.setRoles(link.getRoles());
 		Application application = applicationRepo.findByAppId(link.getAppId());
 		path = application.getContext()+link.getPath();
 	    path = path.trim();
 	    temp.setActive(link.isActive());
 	    
 	    if(application.isStrict()){
-	    temp.setStrict(application.isStrict());
-	    temp.setResourceid(application.getResourceid().trim());
+	    	temp.setStrict(application.isStrict());
+	    	temp.setResourceid(application.getResourceid().trim());
 	    }else{
 	    	   temp.setStrict(false);
 	    	   temp.setResourceid("");
@@ -276,8 +292,22 @@ public class ApplicationController extends SingleTemplateController{
 			links = (List<Link>)linkRepository.findAll();
 			List<AuthenticationProvider> listAuthenticationProvider = (List<AuthenticationProvider>)authenticationProviderRepository.findAll();
 		
+			Application app1 = applicationRepo.findByAppId(hiddenCategory);
 			
-			
+		    RoleCategory category = roleCategories.findByRoleCategoryId((Long.parseLong(Integer.toString(app1.getRoleCategoryId()))));
+		    List<String> rt = new ArrayList<String>();
+		    StringBuffer buf = new StringBuffer();
+		    String app = "";
+		    if(category.getRoles().size()>0){
+			    for(Roles r:category.getRoles()) {
+			    	buf.append(r.getRoleName());
+			    	buf.append(";");
+			   }
+			     app = buf.toString();
+			     app = app.substring(0,app.length()-1);
+			     app = "["+app+"]";
+		    };
+		    model.addAttribute("rolesDescription", app);
 			model.addAttribute("link",link);
 			
 			List<RoleCategory> listCategories = (List<RoleCategory>)roleCategories.findAll();
@@ -319,7 +349,7 @@ public class ApplicationController extends SingleTemplateController{
 		}else{
 			app.setResourceid("");
 		}
-		List<String> rt = new ArrayList<String>();
+		/*List<String> rt = new ArrayList<String>();
 		link.setRoles(rt);
 		if(category !=null)
 		for(Roles r:category.getRoles()) {
@@ -328,6 +358,8 @@ public class ApplicationController extends SingleTemplateController{
 		if(rt.size()>0) {
 			link.setRoles(rt);
 		};
+		*/
+		
 		String path = app.getContext()+link.getPath();
 		link.setPath(path.toString());
 		link.setStripPrefix(true);

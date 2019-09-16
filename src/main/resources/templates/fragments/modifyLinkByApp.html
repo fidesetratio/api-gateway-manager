@@ -50,13 +50,28 @@
 							</div>
 							
 							</div>
+							
+							
+								<div class="row">
+							
+									<div class="col-sm-6 form-group">
+									
+								<label for="active">Roles</label>
+		 						<br/>
+		 						Available Roles:<span th:text="${rolesDescription}"/>
+		 						<input type="text"  class="form-control" th:field="*{roles}" >
+		 					</div>
+							
+							</div>
 						   
-						  							</div>
-				
-						   
-							<input type="hidden"  class="form-control" th:field="*{appId}" >
-							<input type="hidden"  class="form-control" th:field="*{providerId}" >
-							<input type="hidden"  class="form-control" th:field="*{stripPrefix}" >
+						  	</div>
+						
+						
+					
+						
+						<input type="hidden"  class="form-control" th:field="*{appId}" >
+						<input type="hidden"  class="form-control" th:field="*{providerId}" >
+						<input type="hidden"  class="form-control" th:field="*{stripPrefix}" >
 						<input type="hidden"  class="form-control" th:field="*{categoryId}" >
 						<input type="hidden"  class="form-control" th:field="*{serviceId}" >
 						<input type="hidden"  class="form-control" th:field="*{context}" >
