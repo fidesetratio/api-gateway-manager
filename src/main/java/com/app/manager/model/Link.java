@@ -61,6 +61,14 @@ public class Link {
 	@Convert(converter=ListDelimiterConverter.class)
 	private List<String> roles = new ArrayList<String>();
 	
+	
+	@Column(name="scopes")
+	@Convert(converter=ListDelimiterConverter.class)
+	private List<String> scopes = new ArrayList<String>();
+	
+
+
+
 	@Column(name="categoryId")
 	private Long categoryId;
 	
@@ -105,6 +113,7 @@ public class Link {
 		this.stripPrefix = true;
 		this.strict = false;
 		this.resourceid = "";
+		this.scopes = new ArrayList<String>();
 	}
 	
 	
@@ -276,5 +285,14 @@ public class Link {
 
 	public void setStrict(boolean strict) {
 		this.strict = strict;
+	}
+	
+	public List<String> getScopes() {
+		return scopes;
+	}
+
+
+	public void setScopes(List<String> scopes) {
+		this.scopes = scopes;
 	}
 }

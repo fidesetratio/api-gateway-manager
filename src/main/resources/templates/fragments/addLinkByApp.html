@@ -35,6 +35,26 @@
 							
 							</div>
 						   
+						   
+						   	<div class="row">
+							
+									<div class="col-sm-6 form-group">
+									
+								<label for="active">Scopes</label>
+		 						<br/>
+		 							  <div:block th:each="sc : ${scopesLabel}">
+               					 <label class="checkbox-inline">
+		 						<input type="checkbox" name="scopes" th:value="${sc}" />
+		 						<span th:text="${sc}"/>
+		 						</label>
+		 						
+              				 </div:block>
+		 					</div>
+							
+							</div>
+						   
+						   
+						   
 							<input type="hidden"  class="form-control" th:field="*{appId}" >
 							<input type="hidden"  class="form-control" th:field="*{providerId}" >
 							<input type="hidden"  class="form-control" th:field="*{stripPrefix}" >

@@ -133,6 +133,14 @@ public class ApplicationController extends SingleTemplateController{
 			     app = "["+app+"]";
 		    };
 		    model.addAttribute("rolesDescription", app);
+		    List<String> scopesLabel = new ArrayList<String>();
+		    scopesLabel.add("read");
+		    scopesLabel.add("write");
+		    
+		    model.addAttribute("rolesDescription", app);
+		    model.addAttribute("scopesLabel", scopesLabel);
+		    model.addAttribute("scopeValue", l.getScopes());
+	
 		    return "fragments/modifyLinkByApp";
 			
 	}
@@ -168,6 +176,7 @@ public class ApplicationController extends SingleTemplateController{
 		path = application.getContext()+link.getPath();
 	    path = path.trim();
 	    temp.setActive(link.isActive());
+	    temp.setScopes(link.getScopes());
 	    
 	    if(application.isStrict()){
 	    	temp.setStrict(application.isStrict());
@@ -316,7 +325,11 @@ public class ApplicationController extends SingleTemplateController{
 			model.addAttribute("link",link);
 			model.addAttribute("links",links);
 			
-			
+			 List<String> scopesLabel = new ArrayList<String>();
+			 scopesLabel.add("read");
+			 scopesLabel.add("write");
+			 model.addAttribute("scopesLabel", scopesLabel);   
+			    
 			return "fragments/addLinkByApp";
 	}
 

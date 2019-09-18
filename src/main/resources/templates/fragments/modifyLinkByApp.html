@@ -64,6 +64,33 @@
 							
 							</div>
 						   
+						   
+						   
+						   	   	<div class="row">
+							
+									<div class="col-sm-6 form-group">
+									
+								<label for="active">Scopes</label>
+		 						<br/>
+		 				
+		 					
+		 					
+		 					  <div:block th:each="sc : ${scopesLabel}">
+               					 <label class="checkbox-inline">
+		 						<input type="checkbox" name="scopes" th:value="${sc}" th:checked="${#lists.contains(scopeValue,'read')}"/>
+		 						<span th:text="${sc}"/>
+		 						</label>
+		 						
+               </div:block>
+               
+               
+               
+		 					</div>
+							
+							</div>
+							
+							
+							
 						  	</div>
 						
 						

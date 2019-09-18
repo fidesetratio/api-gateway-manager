@@ -65,6 +65,7 @@ CREATE TABLE `links` (
   `appId` int(11) NOT NULL DEFAULT '0',
    strict varchar(2) default 'N',
    resourceid varchar(255) default null,  
+  `scopes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`linkId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
 

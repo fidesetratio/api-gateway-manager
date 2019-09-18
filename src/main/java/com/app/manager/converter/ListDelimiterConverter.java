@@ -24,7 +24,7 @@ public class ListDelimiterConverter implements AttributeConverter<List<String>,S
             return new ArrayList<String>();
         }
 
-        String[] data = dbData.split(",");
+        String[] data = dbData.split(";");
         return Arrays.asList(data);
     }
 
