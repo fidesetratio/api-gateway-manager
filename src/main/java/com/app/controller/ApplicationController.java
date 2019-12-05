@@ -123,15 +123,21 @@ public class ApplicationController extends SingleTemplateController{
 		    List<String> rt = new ArrayList<String>();
 		    StringBuffer buf = new StringBuffer();
 		    String app = "";
-		    if(category.getRoles().size()>0){
-			    for(Roles r:category.getRoles()) {
-			    	buf.append(r.getRoleName());
-			    	buf.append(";");
-			   }
-			     app = buf.toString();
-			     app = app.substring(0,app.length()-1);
-			     app = "["+app+"]";
-		    };
+		   if(category != null){
+			    if(category.getRoles() != null){
+				    if(category.getRoles().size()>0){
+					    for(Roles r:category.getRoles()) {
+					    	buf.append(r.getRoleName());
+					    	buf.append(";");
+					   }
+					     app = buf.toString();
+					     app = app.substring(0,app.length()-1);
+					     app = "["+app+"]";
+				    };
+				    
+			    };
+		    
+		   };
 		    model.addAttribute("rolesDescription", app);
 		    List<String> scopesLabel = new ArrayList<String>();
 		    scopesLabel.add("read");
@@ -307,14 +313,20 @@ public class ApplicationController extends SingleTemplateController{
 		    List<String> rt = new ArrayList<String>();
 		    StringBuffer buf = new StringBuffer();
 		    String app = "";
-		    if(category.getRoles().size()>0){
-			    for(Roles r:category.getRoles()) {
-			    	buf.append(r.getRoleName());
-			    	buf.append(";");
-			   }
-			     app = buf.toString();
-			     app = app.substring(0,app.length()-1);
-			     app = "["+app+"]";
+		    if(category !=  null){
+			    if(category.getRoles() != null){
+						    if(category.getRoles().size()>0){
+							    for(Roles r:category.getRoles()) {
+							    	buf.append(r.getRoleName());
+							    	buf.append(";");
+							   }
+						     app = buf.toString();
+						     app = app.substring(0,app.length()-1);
+						     app = "["+app+"]";
+					    };
+					    
+			    };
+			    
 		    };
 		    model.addAttribute("rolesDescription", app);
 			model.addAttribute("link",link);
